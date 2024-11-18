@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import './Home.css';
+import './Qcm.css';
 import logo from '../images/logo.png';
-import lockImage from '../images/lock-image.png'; 
 
-const Home = () => {
+
+const Qcm = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false); // Ajout de l'état pour le menu déroulant
   const [isProfilOpen, setIsProfilOpen] = useState(false); // Menu déroulant "Utilisateur"
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // État pour vérifier si l'utilisateur est connecté
@@ -81,26 +81,10 @@ const Home = () => {
      
 
       {/* Contenu principal */}
-      <main className="home-container">
-      <div className="content-wrapper">
-      <div className="text-container">
-        <h1>CyberPsy</h1>
-        <p className="description">
-          Ce site a pour but de vous aider à comprendre le risque de la
-          CyberAttaque et de pouvoir vous aider à analyser et comprendre vos attaques.
-        </p>
-        <div className="button-group">
-          <a href="/analyse" className="btn-analyser">Lancer une analyse</a>
-          <a href="/profil" className="btn-profil">Consulter les profils en cybersécurité</a>
-          </div>
-          </div>
-          <div className="image-container">
-        <img src={lockImage} alt="Cadenas" className="lock-image" />
-        </div>
-        </div>
-      </main>
-    </>
+   
+
+      </>
   );
 };
 
-export default Home;
+export default Qcm;

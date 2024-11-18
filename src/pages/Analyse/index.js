@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import './Home.css';
+import './Analyse.css';
 import logo from '../images/logo.png';
-import lockImage from '../images/lock-image.png'; 
 
-const Home = () => {
+
+const Analyse = () => {
+
+  
+
+ 
+
   const [isAboutOpen, setIsAboutOpen] = useState(false); // Ajout de l'état pour le menu déroulant
   const [isProfilOpen, setIsProfilOpen] = useState(false); // Menu déroulant "Utilisateur"
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // État pour vérifier si l'utilisateur est connecté
 
+ 
   // voir quand yann aura fini back Fonction de déconnexion (peut être adaptée selon la logique de votre application)
   const handleLogout = () => {
     setIsUserLoggedIn(true);
@@ -81,26 +87,23 @@ const Home = () => {
      
 
       {/* Contenu principal */}
-      <main className="home-container">
-      <div className="content-wrapper">
-      <div className="text-container">
-        <h1>CyberPsy</h1>
-        <p className="description">
-          Ce site a pour but de vous aider à comprendre le risque de la
-          CyberAttaque et de pouvoir vous aider à analyser et comprendre vos attaques.
-        </p>
-        <div className="button-group">
-          <a href="/analyse" className="btn-analyser">Lancer une analyse</a>
-          <a href="/profil" className="btn-profil">Consulter les profils en cybersécurité</a>
-          </div>
-          </div>
-          <div className="image-container">
-        <img src={lockImage} alt="Cadenas" className="lock-image" />
-        </div>
-        </div>
-      </main>
-    </>
+      <div className="analyse-container">
+      <h1 className="analyse-title">Analyse</h1>
+      <p className="analyse-description">
+        Vous pensez être la cible d'une cyberattaque ? <br />
+        Vous souhaitez découvrir qui se cache derrière ou comprendre le profil de l'attaquant ?
+      </p>
+      <p className="analyse-description">
+        Ce questionnaire est conçu pour vous aider à analyser les motivations, les cibles potentielles, et les méthodes utilisées par la personne ou le groupe à l'origine de l'attaque.
+      </p>
+      <p className="analyse-description">
+        Identifiez votre attaquant et comprenez leurs intentions pour mieux vous protéger et anticiper leurs prochaines actions.
+      </p>
+      <button className="analyse-button" >Commencer</button>
+    </div>
+
+      </>
   );
 };
 
-export default Home;
+export default Analyse;

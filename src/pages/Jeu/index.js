@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
-import './Home.css';
+import './Jeu.css';
 import logo from '../images/logo.png';
-import lockImage from '../images/lock-image.png'; 
+import phoneImage from '../images/phone-image.png';
 
-const Home = () => {
-  const [isAboutOpen, setIsAboutOpen] = useState(false); // Ajout de l'état pour le menu déroulant
+const Jeu = () => {
+  const [isAboutOpen, setIsAboutOpen] = useState(false); // Menu déroulant "À propos"
   const [isProfilOpen, setIsProfilOpen] = useState(false); // Menu déroulant "Utilisateur"
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // État pour vérifier si l'utilisateur est connecté
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // État de connexion utilisateur
 
-  // voir quand yann aura fini back Fonction de déconnexion (peut être adaptée selon la logique de votre application)
+  // Fonction de déconnexion
   const handleLogout = () => {
-    setIsUserLoggedIn(true);
-    // Vous pouvez aussi supprimer un token d'authentification ou rediriger l'utilisateur ici
-    // Exemple : localStorage.removeItem('authToken');
-    // Exemple : history.push('/login');
+    setIsUserLoggedIn(false);
+    // Exemple : suppression d'un token d'authentification
+    // localStorage.removeItem('authToken');
   };
-
 
   return (
     <>
@@ -25,34 +23,29 @@ const Home = () => {
           <img src={logo} alt="CyberPsy Logo" className="logo-image" />
           <span className="site-title">CyberPsy</span>
         </div>
-
-       
         <ul className="nav-links">
           <li><a href="/home">Accueil</a></li>
           <li><a href="/profil">Profil</a></li>
           <li><a href="/analyse">Analyse</a></li>
           <li><a href="/simulation">Simulation</a></li>
-          
 
-            {/* Menu déroulant "À propos de nous" */}
-            <li
+          {/* Menu déroulant "À propos de nous" */}
+          <li
             className="dropdown"
             onMouseEnter={() => setIsAboutOpen(true)}
             onMouseLeave={() => setIsAboutOpen(false)}
           >
-          <a href="/about" onClick={(e) => e.preventDefault()}>À propos de nous</a>
-          {isAboutOpen && (
-
+            <a href="/about" onClick={(e) => e.preventDefault()}>À propos de nous</a>
+            {isAboutOpen && (
               <ul className="dropdown-menu">
                 <li><a href="/aboutus">En savoir plus sur les créateurs de CyberPsy</a></li>
                 <li><a href="/jeu">Découvrir notre jeu Android</a></li>
               </ul>
             )}
-
           </li>
 
-        {/* Menu déroulant "Utilisateur" */}
-        {isUserLoggedIn && (
+          {/* Menu déroulant "Utilisateur" */}
+          {isUserLoggedIn ? (
             <li
               className="dropdown"
               onMouseEnter={() => setIsProfilOpen(true)}
@@ -63,14 +56,11 @@ const Home = () => {
                 <ul className="dropdown-menu">
                   <li><a href="/userBoard">Mon tableau de bord</a></li>
                   <li><a href="/parametreCompte">Paramètre de mon compte</a></li>
-                  <li><a href="/" onClick={handleLogout}>Se déconnecter</a></li> {/* Bouton de déconnexion */}
+                  <li><a href="/" onClick={handleLogout}>Se déconnecter</a></li>
                 </ul>
               )}
             </li>
-          )}
-
-           {/* Si l'utilisateur n'est pas connecté */}
-           {!isUserLoggedIn && (
+          ) : (
             <div className="nav-right">
               <li><a href="/login">Se connecter</a></li>
               <li><a href="/register" className="btn-open-account">Créer un compte</a></li>
@@ -78,29 +68,25 @@ const Home = () => {
           )}
         </ul>
       </nav>
-     
 
       {/* Contenu principal */}
-      <main className="home-container">
-      <div className="content-wrapper">
-      <div className="text-container">
-        <h1>CyberPsy</h1>
-        <p className="description">
-          Ce site a pour but de vous aider à comprendre le risque de la
-          CyberAttaque et de pouvoir vous aider à analyser et comprendre vos attaques.
-        </p>
-        <div className="button-group">
-          <a href="/analyse" className="btn-analyser">Lancer une analyse</a>
-          <a href="/profil" className="btn-profil">Consulter les profils en cybersécurité</a>
-          </div>
+      <div className="contenair-jeu">
+        <div className="content-wrapper">
+          <div className="text-container">
+            <h1 className="description">Notre application socio-éducatif</h1>
+            <p className="description">
+              Ce jeu est une simulation de cyberattaque afin d’expliquer les vulnérabilités du quotidien.
+              C’est un contenu socio-éducatif et ludique pour tout type de personne.
+            </p>
+            <button className="download-btn">DOWNLOAD</button>
           </div>
           <div className="image-container">
-        <img src={lockImage} alt="Cadenas" className="lock-image" />
+            <img src={phoneImage} alt="Phone Mockup" />
+          </div>
         </div>
-        </div>
-      </main>
+      </div>
     </>
   );
 };
 
-export default Home;
+export default Jeu;

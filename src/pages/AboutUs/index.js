@@ -83,17 +83,17 @@ const AboutUs = () => {
           <div className="team-member">
             <img src={Avatar2} alt="Avatar2" className="avatar" />
             <h3>Fatima Imam</h3>
-            <p>blablablablabla blablablablabla blablablablabla</p>
+            <p>Fatima est une designer talentueuse, experte en interfaces modernes et intuitives.</p>
           </div>
           <div className="team-member">
             <img src={Avatar1} alt="Avatar1" className="avatar" />
             <h3>Yann Desagnat</h3>
-            <p>blablablablabla blablablablabla blablablablabla</p>
+            <p>Yann est un développeur passionné, spécialisé en backend. Il adore résoudre des problèmes complexes</p>
           </div>
           <div className="team-member">
             <img src={Avatar3} alt="Avatar3" className="avatar" />
             <h3>Johana Lumoni</h3>
-            <p>blablablablabla blablablablabla blablablablabla</p>
+            <p>Johana est une cheffe de projet IT, experte en gestion d’équipes et de délais.</p>
           </div>
         </div>
       </div>
