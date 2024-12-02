@@ -22,7 +22,7 @@ const Login = () => {
       }
   
       try {
-        const response = await axios.post('https://ton-backend.azurewebsites.net/api/auth/login', {
+        const response = await axios.post('https://localhost:8081/api/auth/login', {
           email,
           password,
         });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'; // Import Navigate
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
@@ -14,7 +14,7 @@ const PrivateRoute = ({ element, ...rest }) => {
 
   // Si l'utilisateur est authentifié (token présent), on rend le composant
   // sinon on redirige vers la page de login
-  return token ? element : <Redirect to="/login" />;
+  return token ? element : <Navigate to="/login" />; // Use Navigate instead of Redirect
 };
 
 function App() {
@@ -31,15 +31,15 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Home />} />
-        
+
         {/* Routes privées protégées */}
         <Route
           path="/home"
-          element={isAuthenticated ? <Home /> : <Redirect to="/login" />}
+          element={isAuthenticated ? <Home /> : <Navigate to="/login" />} // Use Navigate for redirection
         />
         <Route
           path="/analyse"
-          element={isAuthenticated ? <Analyse /> : <Redirect to="/login" />}
+          element={isAuthenticated ? <Analyse /> : <Navigate to="/login" />} // Use Navigate for redirection
         />
 
         {/* Routes publiques */}

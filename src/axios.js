@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Crée une instance d'Axios
 const api = axios.create({
-  baseURL: 'https://ton-backend.azurewebsites.net/api/', // Remplace par ton URL de l'API backend
+  baseURL: 'http://localhost:8081/api/', 
 });
 
 // Middleware pour ajouter le token d'accès dans chaque requête

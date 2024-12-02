@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Register.css';
 import logo from '../images/logo.png';
-import axios from 'axios';
+import axios from '../../axios';
 
 
 const Register = () => {
@@ -14,19 +14,8 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
-    if (!username || !email || !password) {
-      alert('Tous les champs sont obligatoires.');
-      return;
-    }
-
-    if (password.length < 6) {
-      alert('Le mot de passe doit comporter au moins 6 caractères.');
-      return;
-    }
-  
     try {
-      const response = await axios.post('https://ton-backend.azurewebsites.net/api/auth/register', {
+      const response = await axios.post('http://localhost:8081/api/auth/register', {
         username,
         email,
         password,
@@ -38,7 +27,7 @@ const Register = () => {
       }
     } catch (error) {
       console.error('Erreur lors de l\'inscription :', error);
-      alert('Une erreur est survenue lors de l\'inscription. Veuillez réessayer.');
+      alert('Une erreur est survenue lors de l\'inscription. Veuillez réessayer.\n ' + error);
     }finally {
       setIsLoading(false); // Ceci sera exécuté dans tous les cas
     }
