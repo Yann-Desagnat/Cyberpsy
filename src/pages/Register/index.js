@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Register.css';
 import logo from '../images/logo.png';
+import axios from 'axios';
 
 
 const Register = () => {
@@ -8,12 +9,41 @@ const Register = () => {
   const [email, setEmail] = useState(''); // Gère le champ email
   const [password, setPassword] = useState(''); // Gère le champ mot de passe
   const [isAboutOpen, setIsAboutOpen] = useState(false); // Gère l'ouverture du menu déroulant "À propos de nous"
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Inscription soumise :', { username, email, password });
-    // Logique pour envoyer les données d'inscription au backend
+    setIsLoading(true);
+
+    if (!username || !email || !password) {
+      alert('Tous les champs sont obligatoires.');
+      return;
+    }
+
+    if (password.length < 6) {
+      alert('Le mot de passe doit comporter au moins 6 caractères.');
+      return;
+    }
+  
+    try {
+      const response = await axios.post('https://ton-backend.azurewebsites.net/api/auth/register', {
+        username,
+        email,
+        password,
+      });
+  
+      if (response.status === 201) {
+        alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
+        window.location.href = '/login'; // Redirige l'utilisateur vers la page de connexion
+      }
+    } catch (error) {
+      console.error('Erreur lors de l\'inscription :', error);
+      alert('Une erreur est survenue lors de l\'inscription. Veuillez réessayer.');
+    }finally {
+      setIsLoading(false); // Ceci sera exécuté dans tous les cas
+    }
   };
+
 
   return (
     <>
@@ -77,7 +107,9 @@ const Register = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)} // Met à jour le mot de passe
           />
-          <button type="submit">S'inscrire</button>
+          <button type="submit"disabled={isLoading}>
+            {isLoading ? 'Inscription...' : "S'inscrire"}
+          </button>
         </form>
       </div>
     </>
