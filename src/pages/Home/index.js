@@ -2,29 +2,30 @@ import React, { useState, useEffect } from 'react';
 import './Home.css';
 import logo from '../images/logo.png';
 import lockImage from '../images/lock-image.png'; 
-import axios from 'axios'; // Utilisation d'axios
+import api from '../../axios';// Utilisation d'axios
+console.log('home monté'); //test
 
 const Home = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false); // Menu déroulant "À propos"
   const [isProfilOpen, setIsProfilOpen] = useState(false); // Menu déroulant "Utilisateur"
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Vérifie si l'utilisateur est connecté
-  const [userName, setUserName] = useState(''); // Nom de l'utilisateur
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(true); // Vérifie si l'utilisateur est connecté
+  const [userName, setUserName] = useState('invité'); // Nom de l'utilisateur
 
   // Vérifie l'état de l'utilisateur (authentification) au chargement du composant
   useEffect(() => {
     const checkUserStatus = async () => {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get('/api/secure/user', {
+          const response = await api.get('/secure/user', {
             headers: {
               Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête
             },
-          });
+          }); // endpoint sécurisé
 
           if (response.status === 200) {
             setIsUserLoggedIn(true);
-            setUserName(response.data); // Le backend retourne le nom de l'utilisateur
+            setUserName(response.data.name || 'Utilisateur'); // Le backend retourne le nom de l'utilisateur
           } else {
             handleLogout(); // Si la réponse n'est pas valide, on se déconnecte
           }
@@ -42,7 +43,7 @@ const Home = () => {
   const handleLogout = () => {
     localStorage.removeItem('authToken'); // Supprimer le token de l'utilisateur
     setIsUserLoggedIn(false);
-    setUserName('');
+    setUserName('Invité');
     window.location.href = '/login'; // Rediriger vers la page de login
   };
 
@@ -56,7 +57,7 @@ const Home = () => {
         </div>
 
         <ul className="nav-links">
-          <li><a href="/home">Accueil</a></li>
+          <li><a href="/">Accueil</a></li>
           <li><a href="/profil">Profil</a></li>
           <li><a href="/analyse">Analyse</a></li>
           <li><a href="/simulation">Simulation</a></li>
@@ -83,7 +84,7 @@ const Home = () => {
               onMouseEnter={() => setIsProfilOpen(true)}
               onMouseLeave={() => setIsProfilOpen(false)}
             >
-              <a href="/" onClick={(e) => e.preventDefault()}>Utilisateur</a>
+              <a href="/" onClick={(e) => e.preventDefault()}>{userName}</a>
               {isProfilOpen && (
                 <ul className="dropdown-menu">
                   <li><a href="/userBoard">Mon tableau de bord</a></li>
@@ -108,7 +109,7 @@ const Home = () => {
       <main className="home-container">
         <div className="content-wrapper">
           <div className="text-container">
-            <h1>CyberPsy</h1>
+            <h1>Bienvenue {isUserLoggedIn ? userName : 'invité'} ! CyberPsy</h1>
             <p className="description">
               Ce site a pour but de vous aider à comprendre le risque de la
               CyberAttaque et de pouvoir vous aider à analyser et comprendre vos attaques.

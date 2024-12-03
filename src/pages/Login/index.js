@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Login.css';
 import logo from '../images/logo.png';
-import axios from 'axios'; 
+import api from '../../axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -22,7 +22,7 @@ const Login = () => {
       }
   
       try {
-        const response = await axios.post('https://localhost:8081/api/auth/login', {
+        const response = await api.post('/auth/login', {
           email,
           password,
         });
@@ -32,10 +32,12 @@ const Login = () => {
           alert('Connexion réussie !');
           // Sauvegarder le token dans le localStorage (ou sessionStorage si nécessaire)
           localStorage.setItem('token', response.data.token);
+          console.log("token ok");
           window.location.href = '/home'; // Redirige vers la page d'accueil après la connexion
         }
       } catch (error) {
         console.error('Erreur lors de la connexion :', error);
+        console.log("test erreur");
         alert('Une erreur est survenue lors de la connexion. Vérifiez vos identifiants.');
       } finally {
         setIsLoading(false); // Arrêter le chargement

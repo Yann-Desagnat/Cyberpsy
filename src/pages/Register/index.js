@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Register.css';
 import logo from '../images/logo.png';
-import axios from '../../axios';
+import api from '../../axios';
 
 
 const Register = () => {
@@ -14,22 +14,32 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
+    // Validation basique des champs
+    if (!username || !email || !password) {
+      alert('Tous les champs sont obligatoires.');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const response = await axios.post('http://localhost:8081/api/auth/register', {
+      const response = await api.post('/auth/register', {
         username,
         email,
         password,
       });
-  
+      console.log('reponse enregistre');
       if (response.status === 201) {
         alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
         window.location.href = '/login'; // Redirige l'utilisateur vers la page de connexion
       }
     } catch (error) {
+      console.log('failler enregistre');
       console.error('Erreur lors de l\'inscription :', error);
       alert('Une erreur est survenue lors de l\'inscription. Veuillez réessayer.\n ' + error);
     }finally {
       setIsLoading(false); // Ceci sera exécuté dans tous les cas
+      console.log('reponse ffff');
     }
   };
 
@@ -98,6 +108,7 @@ const Register = () => {
           />
           <button type="submit"disabled={isLoading}>
             {isLoading ? 'Inscription...' : "S'inscrire"}
+            
           </button>
         </form>
       </div>

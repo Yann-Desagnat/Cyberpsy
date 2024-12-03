@@ -1,0 +1,312 @@
+/* Styles pour la barre de navigation */
+
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f4f4f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1000; /* Assure qu'elle reste au-dessus des autres éléments */
+    
+  }
+
+  
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 60px;
+    align-items: center;
+    margin: 0px; 
+    padding: 0; 
+    
+    overflow: visible;
+  }
+  .nav-right {
+    gap: 0px;
+    overflow: hidden; 
+
+  }
+
+  .nav-links li {
+    display: inline;
+  }
+  
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 5px; 
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+.nav-links a:hover {
+    color: #555;
+    background-color: #007bff; 
+    color: #fff; 
+  }
+  
+.btn-open-account {
+    background-color: #000; /* Fond noir */
+    color: #fff; /* Texte blanc */
+    padding: 5px 10px; /* Marges internes */
+    border-radius: 5px; /* Coins arrondis */
+    text-decoration: none; /* Pas de soulignement */
+    font-weight: bold; /* Texte en gras pour le rendre bien visible */
+    display: inline-block; /* Comportement de bouton */
+    text-align: center; /* Centrer le texte */
+   
+}
+/*partie nom cyberpsy et logo*/
+.site-title {
+    font-size: 17px; 
+    font-weight: bold;
+    margin-left: 5px; 
+    display: center;
+  
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+  }
+  
+    /* Style pour l'image du logo */
+
+.logo-image {
+    width: 30px; /* Taille du logo */
+    height: 30px; /* Taille du logo */
+    margin-right: 10px; /* Espace entre le logo et le texte */
+    vertical-align: middle; /* Aligner verticalement avec le texte */
+  }
+  .navbar-logo {
+    display: flex;
+    align-items: center;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding:0;
+    background-color: #f4f4f9;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+  }
+  
+
+
+  .home-container {
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    padding: 20px;
+    height: 100vh;
+  }
+  
+  .content-wrapper {
+    display: flex;
+    gap: 40px; /* Espace entre les colonnes */
+    max-width: 1200px; /* Largeur maximale du contenu */
+    width: 100%; /* Prend toute la largeur disponible */
+  }
+
+  /* Section texte */
+  .text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Aligne verticalement */
+    flex: 1; /* Prend l'espace disponible à gauche */
+   
+
+  }
+  
+  .text-container h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+  
+  .text-container .description {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 30px;
+    text-size-adjust: 20px;
+    margin-left: 20px;
+  }
+
+
+  
+  /*menu deroulant*/
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    min-width: 50px;
+    z-index: 1;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    top: 100%; 
+    z-index: 1001;
+    
+   
+  }
+  
+ 
+ 
+  .dropdown {
+    position: relative; /* Important pour que le menu soit positionné correctement */
+  }
+  .dropdown-menu li a {
+    font-size: 12px;
+    padding: 12px 16px;
+    color: white;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-menu li a:hover {
+    background-color: #575757;
+  }
+  
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+
+
+  /*userboard*/
+
+  .user-board-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+  }
+  .user-board-container {
+    display: flex; /* Active le mode flexbox pour les graphiques */
+   
+    justify-content: space-around; /* Contrôle la distribution horizontale */
+    align-items: flex-start; /* Contrôle l'alignement vertical */
+    gap: 20px; /* Espace entre les graphiques */
+    margin: 20px 20px 20px 0; /* Espace autour de la section des graphiques */
+  }
+  
+  .dashboard-content {
+    display: flex;
+    gap: 20px; /* Espacement entre les éléments */
+    display: flex;
+ 
+    align-items: center;
+    gap: 40px; /* Permet aux éléments de passer à la ligne sur petits écrans */
+  }
+  
+  .charts-section {
+    display: flex;
+    justify-content: space-between; /* Place les graphiques côte à côte */
+    align-items: flex-start; /* Aligne les graphiques sur le haut */
+    gap: 20px; /* Espace entre les graphiques */
+    margin-bottom: 20px; /* Espace sous les graphiques */
+  }
+  
+  .chart {
+  flex: 1; /* Chaque graphique occupe un espace égal */
+  max-width: 45%; /* Limite la largeur à 45% pour deux graphiques côte à côte */
+  min-width: 300px; /* Assure une largeur minimale */
+  text-align: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+.level-bar {
+  width: 100%;
+  height: 30px;
+  background-color: #e0e0e0;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+}
+
+.level-indicator {
+  height: 100%;
+  line-height: 30px;
+  color: white;
+  text-align: center;
+  border-radius: 15px;
+}
+
+  .user-level {
+    margin-top: 20px;
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0
+    )}  
+  .personalized-resources {
+    margin-top: 20px;
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .personalized-resources h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .personalized-resources ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .personalized-resources ul li {
+    margin: 10px 0;
+  }
+  
+  .personalized-resources ul li a {
+    text-decoration: none;
+    color: #007bff;
+    transition: color 0.3s;
+  }
+  
+  .personalized-resources ul li a:hover {
+    color: #0056b3;
+  }
+  
+ /*respondive*/
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column; /* Place les éléments en colonne */
+        align-items: flex-start; /* Aligne les éléments à gauche */
+        padding: 10px; /* Réduit l'espacement interne */
+    }
+
+    .nav-links {
+        gap: 10px; /* Réduit l'espace entre les liens */
+        flex-wrap: wrap; /* Autorise les liens à aller à la ligne */
+    }
+
+    dashboard-content {
+      flex-direction: column; /* Empile les graphiques verticalement */
+      align-items: center; /* Centre les graphiques */
+    }
+  
+    .chart {
+      max-width: 100%; /* Les graphiques occupent toute la largeur disponible */
+    }
+  }
