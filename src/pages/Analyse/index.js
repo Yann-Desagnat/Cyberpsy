@@ -99,7 +99,7 @@ const Analyse = () => {
       <p className="analyse-description">
         Identifiez votre attaquant et comprenez leurs intentions pour mieux vous protéger et anticiper leurs prochaines actions.
       </p>
-      <button className="analyse-button" >Commencer</button>
+      <a href="/Qcm" className="analyse-button">Commencer</a>
     </div>
 
       </>

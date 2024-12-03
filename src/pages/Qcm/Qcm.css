@@ -144,6 +144,237 @@
   .dropdown:hover .dropdown-menu {
     display: block;
   }
+
+/* qcm-container */
+.qcm-container {
+  margin: 20px auto;
+  padding: 40px;
+
+  background-color: #f4f4f9; /* Light background */
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+ /*  min-height: 80vh;  Minimum height for visual balance */
+
+}
+
+/* Titre du questionnaire */
+.question-title {
+  font-size: 2rem; /* Bigger font size for impact */
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: bold;
+}
+
+.question-title::after {
+  content: "";
+  display: block;
+  width: 150px;
+  height: 3px;
+  background-color: #007bff; /* Blue underline */
+  margin: 15px auto;
+}
+
+/* Section des questions */
+.question-text {
+  font-size: 1.2rem; /* Réduction de la taille */
+  margin-bottom: 20px;
+  color: #555;
+}
+
+/* Liste des options */
+.options-list {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px; /* Increased spacing between buttons */
+  justify-content: center;
+
+}
+
+/* Boutons de réponse */
+.option-button {
+  margin: 10px auto;
+  padding: 20px;
+  max-width: 800px; 
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 1rem; /* Bigger font */
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 250px; /* Fixed button width */
+  height: 70px; /* Uniform button height */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content; /* Ajuste la largeur au contenu */
+  height: fit-content; /* Ajuste la hauteur au contenu */
+}
+
+.option-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.option-button:active {
+  background-color: #003f7f;
+  transform: scale(0.95);
+}
+
+/* Section des résultats */
+.qcm-results-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  text-align: center;
+}
+
+.results-title {
+  font-size: 3rem; /* Bigger title */
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: bold;
+}
+
+.result-section {
+  text-align: center;
+  font-size: 1.2rem; /* Bigger font for results */
+  color: #333;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+/* Liste des résultats */
+.results-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.results-list li {
+  font-size: 1rem; /* Larger text for each result */
+  margin: 15px 0;
+}
+
+.result-type {
+  font-weight: bold;
+}
+
+.result-percentage {
+  margin-left: 15px;
+  color: #007bff;
+}
+
+/* Restart button */
+.restart-button {
+  margin-top: 30px;
+  padding: 20px 40px;
+  background-color: #007bff; /* Blue button */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.5rem; /* Bigger text */
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.restart-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.restart-button:active {
+  background-color: #003f7f;
+  transform: scale(0.95);
+}
+
+/* Progress bars for results */
+.result-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.result-bar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: center;
+}
+
+.type-label {
+  font-size: 1rem; /* Larger font for labels */
+  font-weight: bold;
+  width: 250px; /* Fixed width for alignment */
+  text-align: right;
+  color: #333;
+}
+
+.progress-bar-container {
+  flex: 1;
+  height: 20px;
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+  height: 100%;
+  transition: width 0.5s ease;
+  border-radius: 5px;
+}
+
+.percentage-label {
+  font-size: 1.2rem; /* Bigger font for percentage */
+  font-weight: bold;
+  width: 70px;
+  text-align: left;
+  color: #333;
+}
+
+  
+.profile-button {
+  margin-top: 20px;
+  margin-left: 5px;
+  padding: 15px 30px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.profile-button:active {
+  background-color: #003f7f;
+  transform: scale(0.95);
+}
+
   
  /*respondive*/
 @media (max-width: 768px) {
@@ -158,6 +389,17 @@
         flex-wrap: wrap; /* Autorise les liens à aller à la ligne */
     }
 
+    .option-button {
+      width: 90%; /* Les boutons occupent presque toute la largeur */
+    }
+  
+    .question-title {
+      font-size: 2rem; /* Réduction de la taille du titre sur mobile */
+    }
+  
+    .question-text {
+      font-size: 1.2rem; /* Réduction de la taille du texte sur mobile */
+    }
 }
 
 
