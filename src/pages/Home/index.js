@@ -8,8 +8,8 @@ console.log('home monté'); //test
 const Home = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false); // Menu déroulant "À propos"
   const [isProfilOpen, setIsProfilOpen] = useState(false); // Menu déroulant "Utilisateur"
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(true); // Vérifie si l'utilisateur est connecté
-  const [userName, setUserName] = useState('invité'); // Nom de l'utilisateur
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Vérifie si l'utilisateur est connecté
+  const [userName, setUserName] = useState(''); // Nom de l'utilisateur
 
   // Vérifie l'état de l'utilisateur (authentification) au chargement du composant
   useEffect(() => {
@@ -109,7 +109,7 @@ const Home = () => {
       <main className="home-container">
         <div className="content-wrapper">
           <div className="text-container">
-            <h1>Bienvenue {isUserLoggedIn ? userName : 'invité'} ! CyberPsy</h1>
+            <h1> {isUserLoggedIn ? userName : ''} CyberPsy</h1>
             <p className="description">
               Ce site a pour but de vous aider à comprendre le risque de la
               CyberAttaque et de pouvoir vous aider à analyser et comprendre vos attaques.

@@ -3,46 +3,51 @@ import './Register.css';
 import logo from '../images/logo.png';
 import api from '../../axios';
 
-
 const Register = () => {
-  const [username, setUsername] = useState(''); // Gère le champ de nom d'utilisateur
-  const [email, setEmail] = useState(''); // Gère le champ email
-  const [password, setPassword] = useState(''); // Gère le champ mot de passe
-  const [isAboutOpen, setIsAboutOpen] = useState(false); // Gère l'ouverture du menu déroulant "À propos de nous"
+  const [firstName, setFirstName] = useState(''); // Champ pour le prénom
+  const [lastName, setLastName] = useState(''); // Champ pour le nom
+  const [email, setEmail] = useState(''); // Champ pour l'email
+  const [password, setPassword] = useState(''); // Champ pour le mot de passe
+  const [isAboutOpen, setIsAboutOpen] = useState(false); // Menu déroulant "À propos"
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Validation basique des champs
-    if (!username || !email || !password) {
+    // Validation des champs
+    if (!firstName || !lastName || !email || !password) {
       alert('Tous les champs sont obligatoires.');
       setIsLoading(false);
       return;
     }
 
     try {
+      const currentDate = new Date().toISOString(); // Date actuelle au format ISO
+      const role = 'Utilisateur'; // Rôle par défaut
+      const niveauUtilisateur = 0; // Niveau par défaut
+
       const response = await api.post('/auth/register', {
-        username,
+        nom: lastName,
+        prenom: firstName,
         email,
-        password,
+        mot_de_passe: password,
+        role,
+        niveau_utilisateur: niveauUtilisateur,
+        derniere_activite: currentDate,
       });
-      console.log('reponse enregistre');
+
       if (response.status === 201) {
         alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
         window.location.href = '/login'; // Redirige l'utilisateur vers la page de connexion
       }
     } catch (error) {
-      console.log('failler enregistre');
       console.error('Erreur lors de l\'inscription :', error);
-      alert('Une erreur est survenue lors de l\'inscription. Veuillez réessayer.\n ' + error);
-    }finally {
-      setIsLoading(false); // Ceci sera exécuté dans tous les cas
-      console.log('reponse ffff');
+      alert('Une erreur est survenue lors de l\'inscription. Veuillez réessayer.');
+    } finally {
+      setIsLoading(false);
     }
   };
-
 
   return (
     <>
@@ -53,12 +58,10 @@ const Register = () => {
           <span className="site-title">CyberPsy</span>
         </div>
         <ul className="nav-links">
-          <li><a href="/home">Accueil</a></li>
+          <li><a href="/">Accueil</a></li>
           <li><a href="/profil">Profil</a></li>
           <li><a href="/analyse">Analyse</a></li>
           <li><a href="/simulation">Simulation</a></li>
-
-          {/* Menu déroulant "À propos de nous" */}
           <li
             className="dropdown"
             onMouseEnter={() => setIsAboutOpen(true)}
@@ -72,8 +75,6 @@ const Register = () => {
               </ul>
             )}
           </li>
-
-          
           <div className="nav-right">
             <li><a href="/login">Se connecter</a></li>
             <li><a href="/register" className="btn-open-account">Créer un compte</a></li>
@@ -85,15 +86,22 @@ const Register = () => {
       <div className="register-container">
         <h2>Inscription</h2>
         <p className="login-prompt">
-        Déjà inscrit(e) ? <a href="/login" className="login-link">Connectez-vous ici.</a>
+          Déjà inscrit(e) ? <a href="/login" className="login-link">Connectez-vous ici.</a>
         </p>
         <form onSubmit={handleSubmit}>
+        <input
+            type="text"
+            placeholder="Nom"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)} // Met à jour le nom
+          />
           <input
             type="text"
-            placeholder="Nom d'utilisateur"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)} // Met à jour le username
+            placeholder="Prénom"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)} // Met à jour le prénom
           />
+         
           <input
             type="email"
             placeholder="exemple@exemple.fr"
@@ -106,9 +114,8 @@ const Register = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)} // Met à jour le mot de passe
           />
-          <button type="submit"disabled={isLoading}>
+          <button type="submit" disabled={isLoading}>
             {isLoading ? 'Inscription...' : "S'inscrire"}
-            
           </button>
         </form>
       </div>
