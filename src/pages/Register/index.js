@@ -30,7 +30,7 @@ const Register = () => {
       const response = await api.post('/auth/register', {
         nom: lastName,
         prenom: firstName,
-        email,
+        email : email,
         mot_de_passe: password,
         role,
         niveau_utilisateur: niveauUtilisateur,
