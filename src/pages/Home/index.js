@@ -11,13 +11,44 @@ const Home = () => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Vérifie si l'utilisateur est connecté
   const [userName, setUserName] = useState(''); // Nom de l'utilisateur
 
+  //alert(String(localStorage.getItem('token')));
   // Vérifie l'état de l'utilisateur (authentification) au chargement du composant
+
   useEffect(() => {
+    const checkUserStatus = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.warn("No token found in localStorage.");
+        handleLogout();
+        return;
+      }
+  
+      try {
+        const response = await api.get('/auth/getuser', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        if (response.status === 200) {
+          setIsUserLoggedIn(true);
+          setUserName(`${response.data.prenom} ${response.data.nom}` || 'Utilisateur');
+        } else {
+          handleLogout();
+        }
+      } catch (error) {
+        console.error("Error verifying user:", error);
+        handleLogout();
+      }
+    };
+  
+    checkUserStatus();
+  }, []);
+  
+  /*useEffect(() => {
     const checkUserStatus = async () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await api.get('/secure/user', {
+          const response = await api.get('/auth//getuser', {
             headers: {
               Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête
             },
@@ -37,7 +68,7 @@ const Home = () => {
     };
 
     checkUserStatus();
-  }, []);
+  }, []);*/
 
   // Fonction de déconnexion
   const handleLogout = () => {

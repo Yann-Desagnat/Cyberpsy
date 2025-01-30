@@ -20,7 +20,7 @@ const Login = () => {
         setIsLoading(false);
         return;
       }
-  
+      console.log('Email:', email, 'Password:', password);
       try {
         const response = await api.post('/auth/login', {
           email,
@@ -31,7 +31,7 @@ const Login = () => {
         if (response.status === 200) {
           alert('Connexion réussie !');
           // Sauvegarder le token dans le localStorage (ou sessionStorage si nécessaire)
-          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('token', response.data);
           console.log("token ok");
           window.location.href = '/home'; // Redirige vers la page d'accueil après la connexion
         }
@@ -79,7 +79,8 @@ const Login = () => {
 
       <div className="nav-right">
       <li><a href="/login">Se connecter</a></li>
-      <li><a href="/register" className="btn-open-account">Créer un compte</a></li> </div>
+      <li><a href="/register" className="btn-open-account">Créer un compte</a></li> 
+      </div>
           
         
           

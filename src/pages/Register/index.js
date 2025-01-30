@@ -31,10 +31,10 @@ const Register = () => {
         nom: lastName,
         prenom: firstName,
         email : email,
-        mot_de_passe: password,
+        motDePasse: password,
         role,
-        niveau_utilisateur: niveauUtilisateur,
-        derniere_activite: currentDate,
+        niveauUtilisateur: niveauUtilisateur,
+        derniereActivite: currentDate,
       });
 
       if (response.status === 201) {
