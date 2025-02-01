@@ -15,30 +15,31 @@ const UserBoard = () => {
   useEffect(() => {
     const checkUserStatus = async () => {
       const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const response = await api.get('/secure/user', {
-            headers: {
-              Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête
-            },
-          }); // endpoint sécurisé
-
-          if (response.status === 200) {
-            setIsUserLoggedIn(true);
-            setUserName(response.data.name || 'Utilisateur'); // Le backend retourne le nom de l'utilisateur
-          } else {
-            handleLogout(); // Si la réponse n'est pas valide, on se déconnecte
-          }
-        } catch (error) {
-          console.error('Erreur lors de la vérification de l\'utilisateur:', error);
-          handleLogout(); // En cas d'erreur, on déconnecte l'utilisateur
+      if (!token) {
+        console.warn("No token found in localStorage.");
+        handleLogout();
+        return;
+      }
+  
+      try {
+        const response = await api.get('/auth/getuser', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        if (response.status === 200) {
+          setIsUserLoggedIn(true);
+          setUserName(`${response.data.prenom} ${response.data.nom}` || 'Utilisateur');
+        } else {
+          handleLogout();
         }
+      } catch (error) {
+        console.error("Error verifying user:", error);
+        handleLogout();
       }
     };
-
+  
     checkUserStatus();
   }, []);
-
   // Fonction de déconnexion
   const handleLogout = () => {
     localStorage.removeItem('authToken'); // Supprimer le token de l'utilisateur
@@ -106,24 +107,12 @@ const UserBoard = () => {
       </nav>
 
       {/* Contenu principal */}
-      <main className="home-container">
-        <div className="content-wrapper">
-          <div className="text-container">
-            <h1> {isUserLoggedIn ? userName : ''} CyberPsy</h1>
-            <p className="description">
-              Ce site a pour but de vous aider à comprendre le risque de la
-              CyberAttaque et de pouvoir vous aider à analyser et comprendre vos attaques.
-            </p>
-            <div className="button-group">
-              <a href="/analyse" className="btn-analyser">Lancer une analyse</a>
-              <a href="/profil" className="btn-profil">Consulter les profils en cybersécurité</a>
-            </div>
-          </div>
-          <div className="image-container">
-            <img src={lockImage} alt="Cadenas" className="lock-image" />
-          </div>
-        </div>
-      </main>
+      <div className="dashboard-container">
+        <div className="card">Espace 1</div>
+        <div className="card">Espace 2</div>
+        <div className="card">Espace 3</div>
+        <div className="card">Espace 4</div>
+      </div>
     </>
   );
 };
