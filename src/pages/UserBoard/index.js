@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { RadialBarChart, RadialBar } from "recharts";
 import './UserBoard.css';
 import logo from '../images/logo.png';
 import lockImage from '../images/lock-image.png'; 
@@ -10,6 +11,8 @@ const UserBoard = () => {
   const [isProfilOpen, setIsProfilOpen] = useState(false); // Menu déroulant "Utilisateur"
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Vérifie si l'utilisateur est connecté
   const [userName, setUserName] = useState(''); // Nom de l'utilisateur
+  const [listItems, setListItems] = useState([]); // State to hold the list items
+
 
   // Vérifie l'état de l'utilisateur (authentification) au chargement du composant
   useEffect(() => {
@@ -37,7 +40,18 @@ const UserBoard = () => {
         handleLogout();
       }
     };
-  
+
+    // Replace this with actual database fetching logic
+    const fetchData = async () => {
+      const data = [
+        "Item 1",
+        "Item 2",
+        "Item 3",
+        "Item 4",
+        "Item 5", // Example items; these would come from your database
+      ];
+      setListItems(data); // Store the fetched data in state
+    }
     checkUserStatus();
   }, []);
   // Fonction de déconnexion
@@ -47,6 +61,9 @@ const UserBoard = () => {
     setUserName('Invité');
     window.location.href = '/login'; // Rediriger vers la page de login
   };
+
+  const [progress, setProgress] = useState(65); // Example progress value
+
 
   return (
     <>
@@ -108,10 +125,36 @@ const UserBoard = () => {
 
       {/* Contenu principal */}
       <div className="dashboard-container">
-        <div className="card">Espace 1</div>
-        <div className="card">Espace 2</div>
+        <div className="card">
+        <h3>Espace 1</h3>
+          <RadialBarChart
+            width={150}
+            height={150}
+            cx={75}
+            cy={75}
+            innerRadius="80%"
+            outerRadius="100%"
+            barSize={15}
+            data={[{ name: "Progress", value: progress, fill: "#007bff" }]}
+            startAngle={90}
+            endAngle={90 - (progress / 100) * 360} // Full circle
+          >
+            <RadialBar minAngle={15} background dataKey="value" />
+          </RadialBarChart>
+          <p>{progress}% Completed</p>
+
+        </div>
+        <div className="card">
+        <h3>Espace 2</h3>
+        <div className="scrollable-list">
+          <ul>
+            {listItems.slice(0, 3).map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
         <div className="card">Espace 3</div>
-        <div className="card">Espace 4</div>
       </div>
     </>
   );

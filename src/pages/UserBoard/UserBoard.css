@@ -242,19 +242,18 @@ body {
 }*/
 
 .dashboard-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex; /* Use flexbox to stack the cards in a column */
+  flex-direction: column; /* Stack items vertically */
   gap: 20px;
   padding: 20px;
-  padding-top: 0;
-  padding-right: 40px;
   position: absolute;
   top: 60px;
   left: 0;
-  width: 98%;
+  width: 300px; /* Set a fixed width for the column */
   height: calc(100% - 80px);
   background-color: #f4f4f4;
 }
+
 
 .card {
   background: #fff;
@@ -264,8 +263,32 @@ body {
   text-align: center;
   font-size: 18px;
   font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
+/* Style for the scrollable list in the second card */
+.scrollable-list {
+  max-height: 100px; /* Set the maximum height (adjust as needed) */
+  overflow-y: auto; /* Enable vertical scrolling when content overflows */
+  margin-top: 20px;
+  width: 100%; /* Full width of the card */
+  text-align: left; /* Align list items to the left */
+}
+
+/* List item styles */
+.scrollable-list ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none; /* Remove default list bullets */
+}
+
+.scrollable-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid #ccc; /* Optional: Adds a divider between items */
+}
 
 /*respondive*/
 @media (max-width: 768px) {
@@ -280,7 +303,9 @@ body {
       flex-wrap: wrap; /* Autorise les liens à aller à la ligne */
   }
 
-
+  .dashboard-container {
+    width: 100%; /* Full width on smaller screens */
+  }
 
 }
 
