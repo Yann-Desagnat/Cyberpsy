@@ -12,7 +12,7 @@ const Jeu = () => {
   const handleLogout = () => {
     setIsUserLoggedIn(false);
     // Exemple : suppression d'un token d'authentification
-    // localStorage.removeItem('authToken');
+   localStorage.removeItem('token');
   };
 
   return (

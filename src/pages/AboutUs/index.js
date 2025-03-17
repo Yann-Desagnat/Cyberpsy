@@ -14,7 +14,7 @@ const AboutUs = () => {
     const handleLogout = () => {
       setIsUserLoggedIn(false);
       // Vous pouvez aussi supprimer un token d'authentification ou rediriger l'utilisateur ici
-      // Exemple : localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
       // Exemple : history.push('/login');
     };
     return (

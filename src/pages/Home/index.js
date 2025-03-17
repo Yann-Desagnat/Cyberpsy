@@ -3,7 +3,6 @@ import './Home.css';
 import logo from '../images/logo.png';
 import lockImage from '../images/lock-image.png'; 
 import api from '../../axios';// Utilisation d'axios
-console.log('home monté'); //test
 
 const Home = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false); // Menu déroulant "À propos"
@@ -11,68 +10,39 @@ const Home = () => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Vérifie si l'utilisateur est connecté
   const [userName, setUserName] = useState(''); // Nom de l'utilisateur
 
-  //alert(String(localStorage.getItem('token')));
   // Vérifie l'état de l'utilisateur (authentification) au chargement du composant
-
   useEffect(() => {
     const checkUserStatus = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
         console.warn("No token found in localStorage.");
-        handleLogout();
-        return;
+        setIsUserLoggedIn(false);
+        return; // Si pas de token, l'utilisateur n'est pas connecté
       }
-  
+
       try {
         const response = await api.get('/auth/getuser', {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
+
         if (response.status === 200) {
           setIsUserLoggedIn(true);
           setUserName(`${response.data.prenom} ${response.data.nom}` || 'Utilisateur');
         } else {
-          handleLogout();
+          setIsUserLoggedIn(false); // Si la réponse est incorrecte, l'utilisateur n'est pas connecté
         }
       } catch (error) {
         console.error("Error verifying user:", error);
-        handleLogout();
+        setIsUserLoggedIn(false);  // En cas d'erreur, l'utilisateur n'est pas connecté
       }
     };
-  
+
     checkUserStatus();
   }, []);
-  
-  /*useEffect(() => {
-    const checkUserStatus = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const response = await api.get('/auth//getuser', {
-            headers: {
-              Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête
-            },
-          }); // endpoint sécurisé
-
-          if (response.status === 200) {
-            setIsUserLoggedIn(true);
-            setUserName(response.data.name || 'Utilisateur'); // Le backend retourne le nom de l'utilisateur
-          } else {
-            handleLogout(); // Si la réponse n'est pas valide, on se déconnecte
-          }
-        } catch (error) {
-          console.error('Erreur lors de la vérification de l\'utilisateur:', error);
-          handleLogout(); // En cas d'erreur, on déconnecte l'utilisateur
-        }
-      }
-    };
-
-    checkUserStatus();
-  }, []);*/
 
   // Fonction de déconnexion
   const handleLogout = () => {
-    localStorage.removeItem('authToken'); // Supprimer le token de l'utilisateur
+    localStorage.removeItem('token'); // Supprimer le token de l'utilisateur
     setIsUserLoggedIn(false);
     setUserName('Invité');
     window.location.href = '/login'; // Rediriger vers la page de login
