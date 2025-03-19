@@ -107,8 +107,8 @@ const Analyse = () => {
       <div className="analyse-container">
         <h1 className="analyse-title">Analyse</h1>
         <p className="analyse-description">
-          Testez vos connaissances en cybersécurité grâce à ce questionnaire interactif. <br />
-          Répondez aux questions et découvrez votre niveau de sensibilisation !
+        Testez vos connaissances sur les techniques de manipulation utilisées par les cybercriminels grâce à ce questionnaire interactif.
+        Répondez aux questions et découvrez votre niveau de sensibilisation aux cybermenaces psychologiques !
         </p>
         <div className="level-selection">
           <label htmlFor="level">Choisissez votre niveau :</label>
