@@ -43,6 +43,7 @@ const Home = () => {
   // Fonction de déconnexion
   const handleLogout = () => {
     localStorage.removeItem('token'); // Supprimer le token de l'utilisateur
+    localStorage.removeItem("userId");
     setIsUserLoggedIn(false);
     setUserName('Invité');
     window.location.href = '/login'; // Rediriger vers la page de login

@@ -10,7 +10,10 @@ const Qcm = () => {
   const params = new URLSearchParams(location.search);
   const selectedLevel = params.get("level") || "debutant";
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
+  const [userId, setUserId] = useState(3); // Utilisateur fictif par défaut
+  const [userName, setUserName] = useState("Invité");
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isProfilOpen, setIsProfilOpen] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [score, setScore] = useState(0);
@@ -35,37 +38,33 @@ const Qcm = () => {
     }
   };
 
-  // Récupérer l'ID utilisateur depuis le localStorage
+  const levelNumber = getLevelNumber(selectedLevel);
+  console.log("🔢 Niveau envoyé au backend :", levelNumber);
+
+  // Fonction pour récupérer l'ID utilisateur depuis le localStorage
   const getUserIdFromLocalStorage = () => {
-    return localStorage.getItem("userId") || null;
+    return localStorage.getItem("userId") || "3"; // Si pas connecté, user fictif ID = 3
   };
 
   // 🔹 Récupérer les questions depuis le backend
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-          console.error("❌ Aucun token JWT trouvé !");
-          navigate("/login"); // Rediriger vers la connexion si pas de token
-          return;
-        }
-
-        const response = await api.get(`/qcm/niveau/${getLevelNumber(selectedLevel)}`, {
-          headers: { Authorization: `Bearer ${token}` }, // ✅ Envoi du Token JWT
-        });
-
+        const response = await api.get(`/qcm/niveau/${levelNumber}`);
         console.log("📌 Toutes les questions reçues :", response.data);
 
-        setQuestions(response.data);
+        const formattedQuestions = response.data.map((q) => ({
+          id: q.idQcm,
+          question: q.question,
+          options: ["Vrai", "Faux"],
+          correctAnswer: q.correctAnswer,
+          source: q.source,
+        }));
+
+        setQuestions(formattedQuestions);
         setIsLoading(false);
       } catch (error) {
         console.error("❌ Erreur lors de la récupération des questions:", error);
-        if (error.response && error.response.status === 401) {
-          console.warn("⚠️ Token invalide ou expiré !");
-          handleLogout();
-        }
         setIsLoading(false);
       }
     };
@@ -77,8 +76,11 @@ const Qcm = () => {
   useEffect(() => {
     const checkUserStatus = async () => {
       const token = localStorage.getItem("token");
-      if (!token) {
-        handleLogout();
+      const storedUserId = localStorage.getItem("userId");
+
+      if (!token || !storedUserId) {
+        console.warn("⚠️ Aucun token trouvé, utilisation de l'utilisateur fictif (ID = 3)");
+        setUserId(3);
         return;
       }
 
@@ -89,13 +91,12 @@ const Qcm = () => {
 
         if (response.status === 200) {
           setIsUserLoggedIn(true);
+          setUserId(response.data.id);
           setUserName(`${response.data.prenom} ${response.data.nom}` || "Utilisateur");
-        } else {
-          handleLogout();
         }
       } catch (error) {
         console.error("❌ Erreur lors de la récupération de l'utilisateur:", error);
-        handleLogout();
+        setUserId(3);
       }
     };
 
@@ -107,55 +108,48 @@ const Qcm = () => {
     localStorage.removeItem("userId");
     setIsUserLoggedIn(false);
     setUserName("Invité");
+    setUserId(3);
     navigate("/login");
   };
 
   const handleAnswer = async (option) => {
     try {
-      const userId = getUserIdFromLocalStorage();
-      if (!userId) {
-        console.error("❌ User ID non trouvé.");
-        alert("Utilisateur non authentifié.");
-        return;
-      }
-
       const currentQuestion = questions[currentQuestionIndex];
+      const userIdToUse = getUserIdFromLocalStorage();
 
-      console.log("✅ User ID:", userId);
-      console.log("✅ Question ID:", currentQuestion.idQcm);
+      console.log("✅ User ID:", userIdToUse);
+      console.log("✅ Question ID:", currentQuestion.id);
       console.log("✅ Réponse choisie:", option);
-      console.log("🔹 Nombre total de questions :", questions.length);
-      console.log("🔹 Index actuel :", currentQuestionIndex);
 
       const response = await api.post("/qcm/submit", {
-        idQcm: currentQuestion.idQcm,
-        idUser: userId,
-        reponse: option
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
+        idQcm: currentQuestion.id,
+        idUser: userIdToUse,
+        reponse: option,
       });
 
       console.log("✅ Réponse API :", response.data);
 
-      setResults(prev => [...prev, {
-        question: currentQuestion.question,
-        userAnswer: option,
-        ...response.data
-      }]);
+      setResults((prev) => [
+        ...prev,
+        {
+          question: currentQuestion.question,
+          userAnswer: option,
+          isCorrect: response.data.isCorrect,
+          correctAnswer: response.data.correctAnswer,
+          source: currentQuestion.source,
+        },
+      ]);
 
       if (response.data.isCorrect) {
-        setScore(prev => prev + 1);
+        setScore((prev) => prev + 1);
       }
 
       if (currentQuestionIndex < questions.length - 1) {
-        setCurrentQuestionIndex(prev => prev + 1);
+        setCurrentQuestionIndex((prev) => prev + 1);
       } else {
         console.log("✅ QCM terminé !");
         setIsSubmitted(true);
       }
-
     } catch (error) {
       console.error("❌ Erreur de soumission :", error);
       alert(error.response?.data?.message || "Erreur de soumission");
@@ -193,10 +187,41 @@ const Qcm = () => {
 
   return (
     <>
+      <nav className="navbar">
+        <div className="navbar-logo">
+          <img src={logo} alt="CyberPsy Logo" className="logo-image" />
+          <span className="site-title">CyberPsy</span>
+        </div>
+        <ul className="nav-links">
+          <li><a href="/">Accueil</a></li>
+          <li><a href="/profil">Profil</a></li>
+          <li><a href="/analyse">Analyse</a></li>
+          <li><a href="/simulation">Simulation</a></li>
+          {isUserLoggedIn ? (
+            <li className="dropdown"
+              onMouseEnter={() => setIsProfilOpen(true)}
+              onMouseLeave={() => setIsProfilOpen(false)}>
+              <a href="/" onClick={(e) => e.preventDefault()}>{userName}</a>
+              {isProfilOpen && (
+                <ul className="dropdown-menu">
+                  <li><a href="/userBoard">Mon tableau de bord</a></li>
+                  <li><a href="/parametreCompte">Paramètres</a></li>
+                  <li><a href="/" onClick={handleLogout}>Se déconnecter</a></li>
+                </ul>
+              )}
+            </li>
+          ) : (
+            <div className="nav-right">
+              <li><a href="/login">Se connecter</a></li>
+              <li><a href="/register" className="btn-open-account">Créer un compte</a></li>
+            </div>
+          )}
+        </ul>
+      </nav>
       <div className="qcm-container">
         {!isSubmitted ? (
           <div className="question-section">
-            <h2 className="question-title">Questionnaire sur {selectedLevel}</h2>
+            <h2 className="question-title">Questionnaire {selectedLevel}</h2>
             {isLoading ? (
               <p>Chargement des questions...</p>
             ) : questions.length > 0 ? (

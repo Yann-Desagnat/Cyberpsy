@@ -50,6 +50,7 @@ const Analyse = () => {
 
   const handleStartQcm = () => {
     navigate(`/qcm?level=${selectedLevel}`);
+    
   };
 
   return (
