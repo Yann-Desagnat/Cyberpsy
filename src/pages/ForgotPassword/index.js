@@ -15,6 +15,7 @@ const ForgotPassword = () => {
   const handleLogout = () => {
     localStorage.removeItem('token'); // Supprime le token d'authentification
     setIsUserLoggedIn(false); // Met à jour l'état de connexion
+    localStorage.removeItem("userId");
     window.location.href = '/login'; // Redirige vers la page de connexion
   };
 

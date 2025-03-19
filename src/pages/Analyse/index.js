@@ -44,6 +44,7 @@ const Analyse = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsUserLoggedIn(false);
+    localStorage.removeItem("userId");
     setUserName('Invité');
     navigate('/login');
   };

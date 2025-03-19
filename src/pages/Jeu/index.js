@@ -11,6 +11,7 @@ const Jeu = () => {
   // Fonction de déconnexion
   const handleLogout = () => {
     setIsUserLoggedIn(false);
+    localStorage.removeItem("userId");
     // Exemple : suppression d'un token d'authentification
    localStorage.removeItem('token');
   };
