@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import './Home.css';
+import './Profil.css';
 import logo from '../images/logo.png';
 import lockImage from '../images/lock-image.png'; 
 import api from '../../axios';// Utilisation d'axios
-console.log('home monté'); //test
 
-const Home = () => {
+
+console.log('profil monté'); //test
+
+const Profil = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false); // Menu déroulant "À propos"
   const [isProfilOpen, setIsProfilOpen] = useState(false); // Menu déroulant "Utilisateur"
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Vérifie si l'utilisateur est connecté
   const [userName, setUserName] = useState(''); // Nom de l'utilisateur
-
   //alert(String(localStorage.getItem('token')));
   // Vérifie l'état de l'utilisateur (authentification) au chargement du composant
 
@@ -39,6 +40,8 @@ const Home = () => {
         handleLogout();
       }
     };
+
+   
   
     checkUserStatus();
   }, []);
@@ -77,6 +80,15 @@ const Home = () => {
     setUserName('Invité');
   };
 
+  
+  function showPopup(popupId) {
+    document.getElementById(`popup${popupId}`).style.display = "block";
+  }
+  
+  function closePopup(popupId) {
+    document.getElementById(`popup${popupId}`).style.display = "none";
+  }
+  
   return (
     <>
       {/* Barre de navigation */}
@@ -136,26 +148,62 @@ const Home = () => {
       </nav>
 
       {/* Contenu principal */}
-      <main className="home-container">
-        <div className="content-wrapper">
-          <div className="text-container">
-            <h1> {isUserLoggedIn ? userName : ''} CyberPsy</h1>
-            <p className="description">
-              Ce site a pour but de vous aider à comprendre le risque de la
-              CyberAttaque et de pouvoir vous aider à analyser et comprendre vos attaques.
-            </p>
-            <div className="button-group">
-              <a href="/analyse" className="btn-analyser">Lancer une analyse</a>
-              <a href="/profil" className="btn-profil">Consulter les profils en cybersécurité</a>
-            </div>
-          </div>
-          <div className="image-container">
-            <img src={lockImage} alt="Cadenas" className="lock-image" />
-          </div>
-        </div>
-      </main>
-    </>
+      
+      <div class="container">
+      <div className="box" onClick={() => showPopup(1)}>Script Kiddie</div>
+<div className="box" onClick={() => showPopup(2)}>Hacktivist</div>
+<div className="box" onClick={() => showPopup(3)}>Insider Malveillant</div>
+<div className="box" onClick={() => showPopup(4)}>Espion d'Etat</div>
+<div className="box" onClick={() => showPopup(5)}>Cybercriminel Professionnel</div>
+
+  </div>
+
+
+  <div id="popup1" class="popup">
+    <button class="close-btn" onClick={() => closePopup(1)}>Close</button>
+    <h2>Popup 1</h2>
+  <div className="popup-content">
+    <div className="popup-item">
+    <i class="fa-solid fa-bullseye"></i>
+      <span>Défendre une cause ou dénoncer des abus
+      </span>
+    </div>
+    <div className="popup-item">
+      <i className="fa fa-shield-alt"></i>
+      <span> DDoS (attaque pas déni de service distribué), défiguration de sites web, divulgation de données volées(doxing).</span>
+    </div>
+    <div className="popup-item">
+      <i className="fa fa-users"></i>
+      <span> Exploitation des vulnérabilités des systèmes web, utilisation d'outils comme Low orbit Ion Cannon pour coordonner des DDoS. Son impact est souvent médiatique, visant à attirer l'attention sur une cause.</span>
+    </div>
+  </div>
+  </div>
+
+  <div id="popup2" class="popup">
+    <button class="close-btn" onClick={() => closePopup(2)}>Close</button>
+    <h2>Popup 2</h2>
+    <p>This is the content for the second popup.</p>
+  </div>
+
+  <div id="popup3" class="popup">
+    <button class="close-btn" onClick={() => closePopup(3)}>Close</button>
+    <h2>Popup 3</h2>
+    <p>This is the content for the third popup.</p>
+  </div>
+
+  <div id="popup4" class="popup">
+    <button class="close-btn" onClick={() => closePopup(4)}>Close</button>
+    <h2>Popup 4</h2>
+    <p>This is the content for the fourth popup.</p>
+  </div>
+
+  <div id="popup5" class="popup">
+    <button class="close-btn" onClick={() => closePopup(5)}>Close</button>
+    <h2>Popup 5</h2>
+    <p>This is the content for the fifth popup.</p>
+  </div>
+ </>
   );
 };
 
-export default Home;
+export default Profil;

@@ -252,6 +252,7 @@ body {
   width: 300px; /* Set a fixed width for the column */
   height: calc(100% - 80px);
   background-color: #f4f4f4;
+  width: 50%;
 }
 
 
@@ -269,26 +270,34 @@ body {
   justify-content: center;
 }
 
-/* Style for the scrollable list in the second card */
 .scrollable-list {
-  max-height: 100px; /* Set the maximum height (adjust as needed) */
-  overflow-y: auto; /* Enable vertical scrolling when content overflows */
-  margin-top: 20px;
-  width: 100%; /* Full width of the card */
-  text-align: left; /* Align list items to the left */
+  max-height: 250px; /* Limit table height */
+  overflow-y: auto;
+  width: 100%;
+  text-align: left;
+  padding: 10px;
 }
 
-/* List item styles */
-.scrollable-list ul {
-  padding: 0;
-  margin: 0;
-  list-style-type: none; /* Remove default list bullets */
+.scrollable-list table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.scrollable-list li {
-  padding: 8px 0;
-  border-bottom: 1px solid #ccc; /* Optional: Adds a divider between items */
+.scrollable-list th, .scrollable-list td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
 }
+
+.scrollable-list th {
+  background-color: #007bff;
+  color: white;
+}
+
+.scrollable-list tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
 
 /*respondive*/
 @media (max-width: 768px) {

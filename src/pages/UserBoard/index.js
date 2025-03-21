@@ -16,7 +16,7 @@ const UserBoard = () => {
 
   // Vérifie l'état de l'utilisateur (authentification) au chargement du composant
   useEffect(() => {
-    const checkUserStatus = async () => {
+    const fetchData = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
         console.warn("No token found in localStorage.");
@@ -25,35 +25,35 @@ const UserBoard = () => {
       }
   
       try {
-        const response = await api.get('/auth/getuser', {
+        const userResponse = await api.get('/auth/getuser', {
           headers: { Authorization: `Bearer ${token}` },
         });
   
-        if (response.status === 200) {
+        if (userResponse.status === 200) {
           setIsUserLoggedIn(true);
-          setUserName(`${response.data.prenom} ${response.data.nom}` || 'Utilisateur');
-        } else {
-          handleLogout();
-        }
-      } catch (error) {
-        console.error("Error verifying user:", error);
-        handleLogout();
+          setUserName(`${userResponse.data.prenom} ${userResponse.data.nom}` || 'Utilisateur');
+  
+          // Fetch user history from API
+          const historyResponse = await api.get(`api/qcm/historique/${userResponse.data.id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+  
+          if (historyResponse.status === 200) {
+            setListItems(historyResponse.data); // Store the fetched history in state
+          } else {
+            console.warn("No history data found.");
+            setListItems([]);
+          }
+        }}
+      catch (error) {
+        console.error("Error fetching user or history:", error);
+       
       }
     };
-
-    // Replace this with actual database fetching logic
-    const fetchData = async () => {
-      const data = [
-        "Item 1",
-        "Item 2",
-        "Item 3",
-        "Item 4",
-        "Item 5", // Example items; these would come from your database
-      ];
-      setListItems(data); // Store the fetched data in state
-    }
-    checkUserStatus();
+  
+    fetchData();
   }, []);
+  
   // Fonction de déconnexion
   const handleLogout = () => {
     localStorage.removeItem('authToken'); // Supprimer le token de l'utilisateur
@@ -147,12 +147,31 @@ const UserBoard = () => {
         <div className="card">
         <h3>Espace 2</h3>
         <div className="scrollable-list">
-          <ul>
-            {listItems.slice(0, 3).map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Valeur</th>
+        </tr>
+      </thead>
+      <tbody>
+        {listItems.length > 0 ? (
+          listItems.map((item, index) => (
+            <tr key={index}>
+              <td>{item.qcm?.titre || "N/A"}</td>
+              <td>{new Date(item.dateReponse).toLocaleString()}</td>
+              <td>{item.correct === "true" ? "✔️" : "❌"}</td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="3" style={{ textAlign: "center" }}>Aucune donnée disponible</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  </div>
       </div>
         <div className="card">Espace 3</div>
       </div>

@@ -10,6 +10,7 @@ import Qcm from './pages/Qcm';
 import Simulation from './pages/Simulation'; 
 import ForgotPassword from './pages/ForgotPassword'; 
 import UserBoard from './pages/UserBoard';
+import Profil from './pages/Profil';
 
 console.log('App.js monté');// test
  
@@ -33,6 +34,7 @@ function App() {
         <Route path="/qcm" element={<Qcm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/userBoard" element={<UserBoard />} />
+        <Route path="/profil" element={<Profil />} />
 
         {/* Route nécessitant une authentification */}
         <Route
