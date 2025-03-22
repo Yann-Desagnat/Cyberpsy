@@ -73,7 +73,6 @@ const Qcm = () => {
     localStorage.removeItem('authToken'); // Supprimer le token de l'utilisateur
     setIsUserLoggedIn(false);
     setUserName('Invité');
-    window.location.href = '/login'; // Rediriger vers la page de login
   };
   
   

@@ -72,7 +72,7 @@ const Home = () => {
 
   // Fonction de déconnexion
   const handleLogout = () => {
-    localStorage.removeItem('authToken'); // Supprimer le token de l'utilisateur
+    localStorage.removeItem('token'); // Supprimer le token de l'utilisateur
     setIsUserLoggedIn(false);
     setUserName('Invité');
   };

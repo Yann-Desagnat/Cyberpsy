@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './Profil.css';
-import logo from '../images/logo.png';
-import lockImage from '../images/lock-image.png'; 
-import api from '../../axios';// Utilisation d'axios
+import logo from '../../images/logo.png';
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShieldHalved, faVirus } from "@fortawesome/free-solid-svg-icons";
+import lockImage from '../../images/lock-image.png'; 
+import api from '../../../axios';// Utilisation d'axios
 
 
 console.log('profil monté'); //test
@@ -148,60 +151,23 @@ const Profil = () => {
       </nav>
 
       {/* Contenu principal */}
-      
-      <div class="container">
-      <div className="box" onClick={() => showPopup(1)}>Script Kiddie</div>
-<div className="box" onClick={() => showPopup(2)}>Hacktivist</div>
-<div className="box" onClick={() => showPopup(3)}>Insider Malveillant</div>
-<div className="box" onClick={() => showPopup(4)}>Espion d'Etat</div>
-<div className="box" onClick={() => showPopup(5)}>Cybercriminel Professionnel</div>
+      <div className="Icon">
+      <Link 
+        to="/profilAttaquants" 
+        className="icon_attaquant"
+      >
+        <FontAwesomeIcon icon={faVirus} size="9x" className="text-blue-500" />
+        <span className="mt-2 text-lg font-semibold">CyberAttaquant</span>
+      </Link>
 
-  </div>
-
-
-  <div id="popup1" class="popup">
-    <button class="close-btn" onClick={() => closePopup(1)}>Close</button>
-    <h2>Popup 1</h2>
-  <div className="popup-content">
-    <div className="popup-item">
-    <i class="fa-solid fa-bullseye"></i>
-      <span>Défendre une cause ou dénoncer des abus
-      </span>
+      <Link 
+        to="/profilDefenseurs" 
+        className="icon_defenseur"
+      >
+        <FontAwesomeIcon icon={faShieldHalved} size="9x" className="text-green-500" />
+        <span className="mt-2 text-lg font-semibold">Défenseur</span>
+      </Link>
     </div>
-    <div className="popup-item">
-      <i className="fa fa-shield-alt"></i>
-      <span> DDoS (attaque pas déni de service distribué), défiguration de sites web, divulgation de données volées(doxing).</span>
-    </div>
-    <div className="popup-item">
-      <i className="fa fa-users"></i>
-      <span> Exploitation des vulnérabilités des systèmes web, utilisation d'outils comme Low orbit Ion Cannon pour coordonner des DDoS. Son impact est souvent médiatique, visant à attirer l'attention sur une cause.</span>
-    </div>
-  </div>
-  </div>
-
-  <div id="popup2" class="popup">
-    <button class="close-btn" onClick={() => closePopup(2)}>Close</button>
-    <h2>Popup 2</h2>
-    <p>This is the content for the second popup.</p>
-  </div>
-
-  <div id="popup3" class="popup">
-    <button class="close-btn" onClick={() => closePopup(3)}>Close</button>
-    <h2>Popup 3</h2>
-    <p>This is the content for the third popup.</p>
-  </div>
-
-  <div id="popup4" class="popup">
-    <button class="close-btn" onClick={() => closePopup(4)}>Close</button>
-    <h2>Popup 4</h2>
-    <p>This is the content for the fourth popup.</p>
-  </div>
-
-  <div id="popup5" class="popup">
-    <button class="close-btn" onClick={() => closePopup(5)}>Close</button>
-    <h2>Popup 5</h2>
-    <p>This is the content for the fifth popup.</p>
-  </div>
  </>
   );
 };

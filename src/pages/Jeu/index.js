@@ -1,19 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Jeu.css';
 import logo from '../images/logo.png';
 import phoneImage from '../images/phone-image.png';
+import lockImage from '../images/lock-image.png'; 
+import api from '../../axios';// Utilisation d'axios
 
 const Jeu = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false); // Menu déroulant "À propos"
   const [isProfilOpen, setIsProfilOpen] = useState(false); // Menu déroulant "Utilisateur"
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // État de connexion utilisateur
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Vérifie si l'utilisateur est connecté
+    const [userName, setUserName] = useState(''); // Nom de l'utilisateur
 
-  // Fonction de déconnexion
-  const handleLogout = () => {
-    setIsUserLoggedIn(false);
-    // Exemple : suppression d'un token d'authentification
-    // localStorage.removeItem('authToken');
-  };
+    useEffect(() => {
+      const checkUserStatus = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.warn("No token found in localStorage.");
+          handleLogout();
+          return;
+        }
+    
+        try {
+          const response = await api.get('/auth/getuser', {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+    
+          if (response.status === 200) {
+            setIsUserLoggedIn(true);
+            setUserName(`${response.data.prenom} ${response.data.nom}` || 'Utilisateur');
+          } else {
+            handleLogout();
+          }
+        } catch (error) {
+          console.error("Error verifying user:", error);
+          handleLogout();
+        }
+      };
+    
+      checkUserStatus();
+    }, []);
+  
+    // voir quand yann aura fini back Fonction de déconnexion (peut être adaptée selon la logique de votre application)
+    const handleLogout = () => {
+      localStorage.removeItem('token'); // Supprimer le token de l'utilisateur
+      setIsUserLoggedIn(false);
+      setUserName('Invité');
+    };
+
 
   return (
     <>
@@ -51,7 +84,7 @@ const Jeu = () => {
               onMouseEnter={() => setIsProfilOpen(true)}
               onMouseLeave={() => setIsProfilOpen(false)}
             >
-              <a href="/" onClick={(e) => e.preventDefault()}>Utilisateur</a>
+              <a href="/" onClick={(e) => e.preventDefault()}>{userName}</a>
               {isProfilOpen && (
                 <ul className="dropdown-menu">
                   <li><a href="/userBoard">Mon tableau de bord</a></li>

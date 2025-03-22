@@ -12,7 +12,12 @@ const UserBoard = () => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Vérifie si l'utilisateur est connecté
   const [userName, setUserName] = useState(''); // Nom de l'utilisateur
   const [listItems, setListItems] = useState([]); // State to hold the list items
-
+  const [derniereActivite, setDerniereActivite] = useState('');
+  const [email, setEmail] = useState('');
+  const [idUtilisateur, setIdUtilisateur] = useState('');
+  const [nom, setNom] = useState('');
+  const [prenom, setPrenom] = useState('');
+  const [role, setRole] = useState('');
 
   // Vérifie l'état de l'utilisateur (authentification) au chargement du composant
   useEffect(() => {
@@ -28,13 +33,18 @@ const UserBoard = () => {
         const userResponse = await api.get('/auth/getuser', {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
+        console.log(userResponse.data)
         if (userResponse.status === 200) {
           setIsUserLoggedIn(true);
           setUserName(`${userResponse.data.prenom} ${userResponse.data.nom}` || 'Utilisateur');
-  
+          setDerniereActivite(userResponse.data.derniereActivite)
+          setEmail(userResponse.data.email)
+          setIdUtilisateur(userResponse.data.idUtilisateur)
+          setNom(userResponse.data.nom)
+          setPrenom(userResponse.data.prenom)
+          setRole(userResponse.data.role)
           // Fetch user history from API
-          const historyResponse = await api.get(`api/qcm/historique/${userResponse.data.id}`, {
+          const historyResponse = await api.get(`/qcm/historique/${userResponse.data.idUtilisateur}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
   
@@ -56,15 +66,19 @@ const UserBoard = () => {
   
   // Fonction de déconnexion
   const handleLogout = () => {
-    localStorage.removeItem('authToken'); // Supprimer le token de l'utilisateur
+    localStorage.removeItem('token'); // Supprimer le token de l'utilisateur
     setIsUserLoggedIn(false);
     setUserName('Invité');
     window.location.href = '/login'; // Rediriger vers la page de login
   };
 
   const [progress, setProgress] = useState(65); // Example progress value
-
-
+  
+        
+        
+        
+        
+        
   return (
     <>
       {/* Barre de navigation */}
@@ -126,7 +140,6 @@ const UserBoard = () => {
       {/* Contenu principal */}
       <div className="dashboard-container">
         <div className="card">
-        <h3>Espace 1</h3>
           <RadialBarChart
             width={150}
             height={150}
@@ -145,7 +158,6 @@ const UserBoard = () => {
 
         </div>
         <div className="card">
-        <h3>Espace 2</h3>
         <div className="scrollable-list">
     <table>
       <thead>
@@ -159,8 +171,8 @@ const UserBoard = () => {
         {listItems.length > 0 ? (
           listItems.map((item, index) => (
             <tr key={index}>
-              <td>{item.qcm?.titre || "N/A"}</td>
-              <td>{new Date(item.dateReponse).toLocaleString()}</td>
+              <td>1</td>
+              <td>18/03/2025</td>
               <td>{item.correct === "true" ? "✔️" : "❌"}</td>
             </tr>
           ))
@@ -173,7 +185,41 @@ const UserBoard = () => {
     </table>
   </div>
       </div>
-        <div className="card">Espace 3</div>
+        <div className="card scrollable-list">
+        <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Auteur</th>
+          <th>Nom</th>
+        </tr>
+      </thead>
+      <tbody>
+        {listItems.length > 0 ? (
+          listItems.map((item, index) => (
+            <tr key={index}>
+              <td>Livre</td>
+              <td>David Kennedy</td>
+              <td>Metasploit</td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="3" style={{ textAlign: "center" }}>Aucune donnée disponible</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+        </div>
+      </div>
+
+      <div className='infos'>
+        <p>Dernière activité :{derniereActivite} </p>
+        <p>Email :{email} </p>
+        <p>Id utilisateur : {idUtilisateur}</p>
+        <p>Nom : {nom}</p>
+        <p>Prenom : {prenom}</p>
+        <p>Rôle : {role}</p>
       </div>
     </>
   );

@@ -241,10 +241,10 @@
     gap: 20px; /* Space between the boxes */
   }
 
-  .box {
+  .box.defenseur{
     width: 250px;
     height: 250px;
-    background-color: lightblue;
+    background-color: rgb(103, 133, 229);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -253,6 +253,8 @@
     cursor: pointer;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    flex-direction: column;
+    margin: 0px;
   }
 
   .popup {
@@ -267,6 +269,7 @@
     border: 2px solid #000;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 999;
   }
 
   .popup .close-btn {

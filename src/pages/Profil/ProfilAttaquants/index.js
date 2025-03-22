@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import './Simulation.css';
-import logo from '../images/logo.png';
-import lockImage from '../images/lock-image.png'; 
-import api from '../../axios';// Utilisation d'axios
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSquareCaretLeft, faSquareCaretRight, faShield, faChild } from "@fortawesome/free-solid-svg-icons";
-console.log('simulation monté'); //test
+import './ProfilAttaquant.css';
 
-const Simulation = () => {
+import logo from '../../images/logo.png';
+import lockImage from '../../images/lock-image.png'; 
+import api from '../../../axios';// Utilisation d'axios
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChild, faLaptopCode, faFaceGrinTongueSquint, faUserSecret, faUserTie } from "@fortawesome/free-solid-svg-icons";
+
+
+console.log('profil monté'); //test
+
+const ProfilAttaquants = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false); // Menu déroulant "À propos"
   const [isProfilOpen, setIsProfilOpen] = useState(false); // Menu déroulant "Utilisateur"
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Vérifie si l'utilisateur est connecté
   const [userName, setUserName] = useState(''); // Nom de l'utilisateur
-
   //alert(String(localStorage.getItem('token')));
   // Vérifie l'état de l'utilisateur (authentification) au chargement du composant
 
@@ -41,6 +43,8 @@ const Simulation = () => {
         handleLogout();
       }
     };
+
+   
   
     checkUserStatus();
   }, []);
@@ -79,6 +83,15 @@ const Simulation = () => {
     setUserName('Invité');
   };
 
+  
+  function showPopup(popupId) {
+    document.getElementById(`popup${popupId}`).style.display = "block";
+  }
+  
+  function closePopup(popupId) {
+    document.getElementById(`popup${popupId}`).style.display = "none";
+  }
+  
   return (
     <>
       {/* Barre de navigation */}
@@ -138,35 +151,76 @@ const Simulation = () => {
       </nav>
 
       {/* Contenu principal */}
-      <div className="explanation">  Séléctionnez un profil attaquant et un profil défenseur pour simuler leur intéractions</div>
-          
-      <div className="box-container">
-        <div className="arrow left-outside"><FontAwesomeIcon icon={faSquareCaretLeft} size="3x" className="text-blue-500" /></div> {/* Inside arrow pointing from Box 1 */}
-        <div className="box left">
-        <FontAwesomeIcon icon={faChild} size="3x" className="icon-profil" />
-      <span className="title-profil">Script Kiddie</span>
-        </div>
-        <div className="arrow left-inside"><FontAwesomeIcon icon={faSquareCaretRight} size="3x" className="text-blue-500" /></div> {/* Inside arrow pointing from Box 1 */}
-
-        <div className="arrow right-inside"><FontAwesomeIcon icon={faSquareCaretLeft} size="3x" className="text-blue-500" /></div> {/* Inside arrow pointing from Box 1 */}
-
-        <div className="box right">
-        <FontAwesomeIcon icon={faShield} size="3x" className="icon-profil" />
-        <span className="title-profil">Ingénieur en sécurité</span>
-        </div>
-        <div className="arrow right-outside"><FontAwesomeIcon icon={faSquareCaretRight} size="3x" className="text-blue-500" /></div> {/* Inside arrow pointing from Box 1 */}
-
-</div>
-
-<div className="analyse-button">Commencer</div>
-
-
-
       
+      <div class="container">
+      <div className="box attaquant" onClick={() => showPopup(1)}>
+        <FontAwesomeIcon icon={faChild} size="3x" className="icon-profil" />
+      <span className="title-profil">Script Kiddie</span></div>
+
+      <div className="box attaquant" onClick={() => showPopup(2)}>
+        <FontAwesomeIcon icon={faLaptopCode} size="3x" className="icon-profil" />
+      <span className="title-profil">Hacktivist</span></div>
+
+      <div className="box attaquant" onClick={() => showPopup(3)}>
+        <FontAwesomeIcon icon={faFaceGrinTongueSquint} size="3x" className="icon-profil" />
+      <span className="title-profil">Insider Malveillant</span></div>
+
+      <div className="box attaquant" onClick={() => showPopup(4)}>
+        <FontAwesomeIcon icon={faUserSecret} size="3x" className="icon-profil" />
+      <span className="title-profil">Espion d'Etat</span></div>
+
+      <div className="box attaquant" onClick={() => showPopup(5)}>
+        <FontAwesomeIcon icon={faUserTie} size="3x" className="icon-profil" />
+      <span className="title-profil">Cybercriminel Professionnel</span></div>
+
+  </div>
 
 
-    </>
+  <div id="popup1" class="popup">
+    <button class="close-btn" onClick={() => closePopup(1)}>Close</button>
+    <h2>Script Kiddie</h2>
+  <div className="popup-content">
+    <div className="popup-item">
+    <i class="fa-solid fa-bullseye"></i>
+      <span>Défendre une cause ou dénoncer des abus
+      </span>
+    </div>
+    <div className="popup-item">
+      <i className="fa fa-shield-alt"></i>
+      <span> DDoS (attaque pas déni de service distribué), défiguration de sites web, divulgation de données volées(doxing).</span>
+    </div>
+    <div className="popup-item">
+      <i className="fa fa-users"></i>
+      <span> Exploitation des vulnérabilités des systèmes web, utilisation d'outils comme Low orbit Ion Cannon pour coordonner des DDoS. Son impact est souvent médiatique, visant à attirer l'attention sur une cause.</span>
+    </div>
+  </div>
+  </div>
+
+  <div id="popup2" class="popup">
+    <button class="close-btn" onClick={() => closePopup(2)}>Close</button>
+    <h2>Popup 2</h2>
+    <p>This is the content for the second popup.</p>
+  </div>
+
+  <div id="popup3" class="popup">
+    <button class="close-btn" onClick={() => closePopup(3)}>Close</button>
+    <h2>Popup 3</h2>
+    <p>This is the content for the third popup.</p>
+  </div>
+
+  <div id="popup4" class="popup">
+    <button class="close-btn" onClick={() => closePopup(4)}>Close</button>
+    <h2>Popup 4</h2>
+    <p>This is the content for the fourth popup.</p>
+  </div>
+
+  <div id="popup5" class="popup">
+    <button class="close-btn" onClick={() => closePopup(5)}>Close</button>
+    <h2>Popup 5</h2>
+    <p>This is the content for the fifth popup.</p>
+  </div>
+ </>
   );
 };
 
-export default Simulation;
+export default ProfilAttaquants;

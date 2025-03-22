@@ -10,7 +10,9 @@ import Qcm from './pages/Qcm';
 import Simulation from './pages/Simulation'; 
 import ForgotPassword from './pages/ForgotPassword'; 
 import UserBoard from './pages/UserBoard';
-import Profil from './pages/Profil';
+import Profil from './pages/Profil/ProfilSelection';
+import ProfilAttaquants from './pages/Profil/ProfilAttaquants';
+import ProfilDefenseurs from './pages/Profil/ProfilDefenseurs';
 
 console.log('App.js monté');// test
  
@@ -35,12 +37,11 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/userBoard" element={<UserBoard />} />
         <Route path="/profil" element={<Profil />} />
+        <Route path="/profilAttaquants" element={<ProfilAttaquants />} />
+        <Route path="/profilDefenseurs" element={<ProfilDefenseurs />} />
 
         {/* Route nécessitant une authentification */}
-        <Route
-          path="/simulation"
-          element={isAuthenticated ? <Simulation /> : <Navigate to="/login" />}
-        />
+        <Route path="/simulation" element={<Simulation/>} />
         
 
         {/* Autres routes publiques */}
