@@ -69,6 +69,7 @@ const UserBoard = () => {
     localStorage.removeItem('token'); // Supprimer le token de l'utilisateur
     setIsUserLoggedIn(false);
     setUserName('Invité');
+    localStorage.removeItem("userId");
     window.location.href = '/login'; // Rediriger vers la page de login
   };
 

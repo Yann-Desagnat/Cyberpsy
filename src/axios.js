@@ -19,4 +19,9 @@ api.interceptors.request.use(
   }
 );
 
+api.interceptors.request.use((config) => {
+  console.log("📤 Headers envoyés :", config.headers); // Vérifiez Authorization
+  return config;
+});
+
 export default api;

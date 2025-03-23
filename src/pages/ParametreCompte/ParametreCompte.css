@@ -18,28 +18,6 @@
     
   }
 
-  .testimonials {
-    text-align: center;
-    margin-top: 30px;
-}
-
-.testimonial-box {
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 10px;
-    display: inline-block;
-    max-width: 500px;
-    font-style: italic;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.intro-quote {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #555;
-    margin-bottom: 20px;
-}
-
   
   .nav-links {
     list-style: none;
@@ -130,8 +108,47 @@
   
 
 
+  .home-container {
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    padding: 20px;
+    height: 100vh;
+  }
+  
+  .content-wrapper {
+    display: flex;
+    gap: 40px; /* Espace entre les colonnes */
+    max-width: 1200px; /* Largeur maximale du contenu */
+    width: 100%; /* Prend toute la largeur disponible */
+  }
+
+  /* Section texte */
+  .text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Aligne verticalement */
+    flex: 1; /* Prend l'espace disponible à gauche */
+   
+
+  }
+  
+  .text-container h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+  
+  .text-container .description {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 30px;
+    text-size-adjust: 20px;
+    margin-left: 20px;
+  }
+
+  
   /*menu deroulant*/
-  .dropdown-menu {
+.dropdown-menu {
     display: none;
     position: absolute;
     background-color: #333;
@@ -166,53 +183,124 @@
   .dropdown:hover .dropdown-menu {
     display: block;
   }
+
+  /* Styles pour les paramètres du compte */
+.parametre-compte-container {
   
- 
-/* About Us section */
-.about-us {
-    padding-top: 80px; /* To avoid content being hidden behind the navbar */
-    text-align: center;
+  margin: 100px auto; /* Espace depuis le haut pour éviter de chevaucher la navbar */
+  padding: 20px;
+  height: 2000px;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-family: 'Roboto', sans-serif;
 }
 
-.about-us h1 {
-    font-size: 3rem;
-    margin-bottom: 40px;
+.parametre-compte-container h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
 }
 
-.team-members {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
+.parametre-compte-container h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #007bff;
 }
 
-.team-member {
-    width: 250px;
-    text-align: center;
+/* Formulaire pour les informations personnelles */
+.user-info,
+.change-password,
+.delete-account {
+  margin-bottom: 30px;
 }
 
-.avatar {
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-    background-size: cover;
-    background-position: center;
-    margin: 0 auto;
-    margin-bottom: 20px;
+.user-info label,
+.change-password label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #555;
 }
 
-h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
+.user-info input,
+.change-password input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px; /* Ajoute de l'espace entre les champs */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
 }
 
-p {
-    font-size: 14px;
-    color: #555;
-    line-height: 1.5;
+.user-info input:focus,
+.change-password input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
 }
 
-/* Mobile responsiveness */
+/* Boutons */
+.parametre-compte-container button {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.parametre-compte-container button:hover {
+  background-color: #0056b3;
+}
+
+/* Bouton de suppression */
+.btn-danger {
+  background-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* Message de confirmation ou d'erreur */
+.message {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #333;
+  text-align: center;
+}
+
+.message.success {
+  color: #28a745;
+}
+
+.message.error {
+  color: #dc3545;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .parametre-compte-container {
+      padding: 15px;
+  }
+
+  .parametre-compte-container h1 {
+      font-size: 20px;
+  }
+
+  .parametre-compte-container h2 {
+      font-size: 16px;
+  }
+}
+
+  
+ /*respondive*/
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column; /* Place les éléments en colonne */
@@ -224,8 +312,9 @@ p {
         gap: 10px; /* Réduit l'espace entre les liens */
         flex-wrap: wrap; /* Autorise les liens à aller à la ligne */
     }
-    .team-members {
-        flex-direction: column;
-        gap: 20px;
-    }
+
+  
+
 }
+
+

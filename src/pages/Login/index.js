@@ -9,41 +9,53 @@ const Login = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false); // Pour gérer l'ouverture du menu À propos
   const [isLoading, setIsLoading] = useState(false);
 
-    // Fonction de soumission du formulaire
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      setIsLoading(true);
-  
-      // Vérifier si les champs sont vides
-      if (!email || !password) {
-        alert('Tous les champs sont obligatoires.');
-        setIsLoading(false);
-        return;
-      }
-      console.log('Email:', email, 'Password:', password);
-      try {
-        const response = await api.post('/auth/login', {
-          email,
-          password,
+  // Fonction de soumission du formulaire
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    // Vérifier si les champs sont vides
+    if (!email || !password) {
+      alert('Tous les champs sont obligatoires.');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await api.post('/auth/login', {
+        email,
+        password,
+      });
+
+      // Si la connexion est réussie
+      if (response.status === 200) {
+        alert('Connexion réussie !');
+        const token = response.data;
+
+        // Sauvegarder le token dans le localStorage
+        localStorage.setItem('token', token);
+
+        // Appel à l'API pour obtenir les détails de l'utilisateur, y compris l'ID
+        const userResponse = await api.get('/auth/getuser', {
+          headers: { Authorization: `Bearer ${token}` },
         });
-  
-        // Si la connexion est réussie
-        if (response.status === 200) {
-          alert('Connexion réussie !');
-          // Sauvegarder le token dans le localStorage (ou sessionStorage si nécessaire)
-          localStorage.setItem('token', response.data);
-          console.log("token ok");
-          window.location.href = '/home'; // Redirige vers la page d'accueil après la connexion
-        }
-      } catch (error) {
-        console.error('Erreur lors de la connexion :', error);
-        console.log("test erreur");
-        alert('Une erreur est survenue lors de la connexion. Vérifiez vos identifiants.');
-      } finally {
-        setIsLoading(false); // Arrêter le chargement
+
+        // Extraire l'ID utilisateur et l'enregistrer dans le localStorage
+        const userId = userResponse.data.idUtilisateur;
+        localStorage.setItem('userId', userId); // Sauvegarde de l'ID utilisateur dans le localStorage
+
+        console.log("Token et ID utilisateur sauvegardés");
+
+        // Rediriger vers la page d'accueil après la connexion
+        window.location.href = '/home';
       }
-    };
-  
+    } catch (error) {
+      console.error('Erreur lors de la connexion :', error);
+      alert('Une erreur est survenue lors de la connexion. Vérifiez vos identifiants.');
+    } finally {
+      setIsLoading(false); // Arrêter le chargement
+    }
+  };
 
   return (
     <>
@@ -58,32 +70,26 @@ const Login = () => {
           <li><a href="/profil">Profil</a></li>
           <li><a href="/analyse">Analyse</a></li>
           <li><a href="/simulation">Simulation</a></li>
-          
-          
+
           {/* Menu déroulant "À propos de nous" */}
           <li
             className="dropdown"
             onMouseEnter={() => setIsAboutOpen(true)}
             onMouseLeave={() => setIsAboutOpen(false)}
           >
-          <a href="/about" onClick={(e) => e.preventDefault()}>À propos de nous</a>
-          {isAboutOpen && (
-
+            <a href="/about" onClick={(e) => e.preventDefault()}>À propos de nous</a>
+            {isAboutOpen && (
               <ul className="dropdown-menu">
                 <li><a href="/aboutus">En savoir plus sur les créateurs de CyberPsy</a></li>
                 <li><a href="/jeu">Découvrir notre jeu Android</a></li>
               </ul>
             )}
-
           </li>
 
-      <div className="nav-right">
-      <li><a href="/login">Se connecter</a></li>
-      <li><a href="/register" className="btn-open-account">Créer un compte</a></li> 
-      </div>
-          
-        
-          
+          <div className="nav-right">
+            <li><a href="/login">Se connecter</a></li>
+            <li><a href="/register" className="btn-open-account">Créer un compte</a></li>
+          </div>
         </ul>
       </nav>
 
@@ -108,7 +114,7 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-            <button type="submit" disabled={isLoading}>
+          <button type="submit" disabled={isLoading}>
             {isLoading ? 'Connexion en cours...' : 'Se connecter'}
           </button>
         </form>

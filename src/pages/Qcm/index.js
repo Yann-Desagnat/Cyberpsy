@@ -1,130 +1,192 @@
 import React, { useState, useEffect } from "react";
-import "./Qcm.css";
-import logo from "../images/logo.png";
-import api from '../../axios';// Utilisation d'axios
-import { useNavigate } from "react-router-dom";
-console.log('QCM monté'); //test
-const questions = [
-  {
-    id: 1,
-    question: "Quel a été l’impact principal de l’attaque ?",
-    options: [
-      { text: "Perturbation des services (ex : DDoS, défiguration de site)", type: "Hacktiviste" },
-      { text: "Vol de données sensibles (ex : informations client, données financières)", type: "Cybercriminel Professionnel" },
-      { text: "Collecte discrète d’informations (ex : espionnage, accès non détecté)", type: "Espion d’État" },
-      { text: "Sabotage interne ou divulgation de secrets d’entreprise", type: "Insider Malveillant" },
-      { text: "Intrusion peu sophistiquée, sans réel impact", type: "Script Kiddie" },
-    ],
-  },
-  {
-    id: 2,
-    question: "Quel était le type de cible principale ?",
-    options: [
-      { text: "Infrastructure critique (ex : réseaux d’énergie, gouvernementaux)", type: "Espion d’État" },
-      { text: "Données financières ou personnelles des clients", type: "Cybercriminel Professionnel" },
-      { text: "Page publique ou réseau de l’entreprise", type: "Hacktiviste" },
-      { text: "Système interne avec accès privilégiés", type: "Insider Malveillant" },
-      { text: "Tout système accessible, sans cible particulière", type: "Script Kiddie" },
-    ],
-  },
-  // Ajoutez plus de questions si nécessaire
-];
+import "./Qcm.css"; // Assurez-vous d'avoir la feuille de style correcte
+import logo from "../images/logo.png"; // Vérifie le chemin du logo
+import api from "../../axios";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Qcm = () => {
+  const [results, setResults] = useState([]);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const selectedLevel = params.get("level") || "debutant";
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [userId, setUserId] = useState(3); // Utilisateur fictif par défaut
+  const [userName, setUserName] = useState("Invité");
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isProfilOpen, setIsProfilOpen] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [results, setResults] = useState({});
-  const [isAboutOpen, setIsAboutOpen] = useState(false); // Menu déroulant "À propos"
-  const [isProfilOpen, setIsProfilOpen] = useState(false); // Menu déroulant "Utilisateur"
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // Vérifie si l'utilisateur est connecté
-  const [userName, setUserName] = useState(''); // Nom de l'utilisateur
-  const navigate = useNavigate(); 
-  
+  const [score, setScore] = useState(0);
+  const [questions, setQuestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+
+  // Options disponibles pour chaque question
+  const options = ["Vrai", "Faux"];
+
+  // Convertir le niveau en chiffre
+  const getLevelNumber = (level) => {
+    switch (level) {
+      case "debutant":
+        return 1;
+      case "intermediaire":
+        return 2;
+      case "avance":
+        return 3;
+      default:
+        return 1;
+    }
+  };
+
+  const levelNumber = getLevelNumber(selectedLevel);
+  console.log("🔢 Niveau envoyé au backend :", levelNumber);
+
+  // Fonction pour récupérer l'ID utilisateur depuis le localStorage
+  const getUserIdFromLocalStorage = () => {
+    return localStorage.getItem("userId") || "3"; // Si pas connecté, user fictif ID = 3
+  };
+
+  // 🔹 Récupérer les questions depuis le backend
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const response = await api.get(`/qcm/niveau/${levelNumber}`);
+        console.log("📌 Toutes les questions reçues :", response.data);
+
+        const formattedQuestions = response.data.map((q) => ({
+          id: q.idQcm,
+          question: q.question,
+          options: ["Vrai", "Faux"],
+          correctAnswer: q.correctAnswer,
+          source: q.source,
+        }));
+
+        setQuestions(formattedQuestions);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("❌ Erreur lors de la récupération des questions:", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, [selectedLevel]);
+
+  // 🔹 Vérifier si l'utilisateur est connecté
   useEffect(() => {
     const checkUserStatus = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const response = await api.get('/secure/user', {
-            headers: {
-              Authorization: `Bearer ${token}`, // Ajout du token dans l'en-tête
-            },
-          }); // endpoint sécurisé
+      const token = localStorage.getItem("token");
+      const storedUserId = localStorage.getItem("userId");
 
-          if (response.status === 200) {
-            setIsUserLoggedIn(true);
-            setUserName(response.data.name || 'Utilisateur'); // Le backend retourne le nom de l'utilisateur
-          } else {
-            handleLogout(); // Si la réponse n'est pas valide, on se déconnecte
-          }
-        } catch (error) {
-          console.error('Erreur lors de la vérification de l\'utilisateur:', error);
-          handleLogout(); // En cas d'erreur, on déconnecte l'utilisateur
+      if (!token || !storedUserId) {
+        console.warn("⚠️ Aucun token trouvé, utilisation de l'utilisateur fictif (ID = 3)");
+        setUserId(3);
+        return;
+      }
+
+      try {
+        const response = await api.get("/auth/getuser", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.status === 200) {
+          setIsUserLoggedIn(true);
+          setUserId(response.data.id);
+          setUserName(`${response.data.prenom} ${response.data.nom}` || "Utilisateur");
         }
+      } catch (error) {
+        console.error("❌ Erreur lors de la récupération de l'utilisateur:", error);
+        setUserId(3);
       }
     };
 
     checkUserStatus();
   }, []);
 
-  // Fonction de déconnexion
   const handleLogout = () => {
-    localStorage.removeItem('authToken'); // Supprimer le token de l'utilisateur
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
     setIsUserLoggedIn(false);
-    setUserName('Invité');
-  };
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  const handleAnswer = (type) => {
-    setAnswers([...answers, type]);
-
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      calculateResults([...answers, type]);
-      setIsSubmitted(true);
-    }
+    setUserName("Invité");
+    setUserId(3);
+    navigate("/login");
   };
 
-  const calculateResults = (finalAnswers) => {
-    const resultCount = {};
+  const handleAnswer = async (option) => {
+    try {
+      const currentQuestion = questions[currentQuestionIndex];
+      const userIdToUse = getUserIdFromLocalStorage();
 
-    finalAnswers.forEach((answer) => {
-      if (resultCount[answer]) {
-        resultCount[answer]++;
-      } else {
-        resultCount[answer] = 1;
+      console.log("✅ User ID:", userIdToUse);
+      console.log("✅ Question ID:", currentQuestion.id);
+      console.log("✅ Réponse choisie:", option);
+
+      const response = await api.post("/qcm/submit", {
+        idQcm: currentQuestion.id,
+        idUser: userIdToUse,
+        reponse: option,
+      });
+
+      console.log("✅ Réponse API :", response.data);
+
+      setResults((prev) => [
+        ...prev,
+        {
+          question: currentQuestion.question,
+          userAnswer: option,
+          isCorrect: response.data.isCorrect,
+          correctAnswer: response.data.correctAnswer,
+          source: currentQuestion.source,
+        },
+      ]);
+
+      if (response.data.isCorrect) {
+        setScore((prev) => prev + 1);
       }
-    });
 
-    const totalAnswers = finalAnswers.length;
-    const percentages = {};
-
-    Object.keys(resultCount).forEach((key) => {
-      percentages[key] = ((resultCount[key] / totalAnswers) * 100).toFixed(2);
-    });
-
-    setResults(percentages);
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex((prev) => prev + 1);
+      } else {
+        console.log("✅ QCM terminé !");
+        setIsSubmitted(true);
+      }
+    } catch (error) {
+      console.error("❌ Erreur de soumission :", error);
+      alert(error.response?.data?.message || "Erreur de soumission");
+    }
   };
 
   const handleRestart = () => {
     setCurrentQuestionIndex(0);
-    setAnswers([]);
+    setResults([]);
     setIsSubmitted(false);
-    setResults({});
+    setScore(0);
+  };
+
+  const displayDetailedResults = () => {
+    return results.map((result, index) => (
+      <div key={index} className="result-item">
+        <h3>Question {index + 1}: {result.question}</h3>
+        <p>
+          Votre réponse : <strong>{result.userAnswer}</strong>{" "}
+          {result.isCorrect ? (
+            <span style={{ color: "green" }}>(Correct)</span>
+          ) : (
+            <span style={{ color: "red" }}>(Incorrect)</span>
+          )}
+        </p>
+        {!result.isCorrect && (
+          <p>Bonne réponse : <strong>{result.correctAnswer}</strong></p>
+        )}
+        {result.source && (
+          <p><em>Source : {result.source}</em></p>
+        )}
+      </div>
+    ));
   };
 
   return (
     <>
-      {/* Barre de navigation */}
       <nav className="navbar">
         <div className="navbar-logo">
           <img src={logo} alt="CyberPsy Logo" className="logo-image" />
@@ -135,41 +197,20 @@ const Qcm = () => {
           <li><a href="/profil">Profil</a></li>
           <li><a href="/analyse">Analyse</a></li>
           <li><a href="/simulation">Simulation</a></li>
-        {/* Menu déroulant "À propos de nous" */}
-        <li
-            className="dropdown"
-            onMouseEnter={() => setIsAboutOpen(true)}
-            onMouseLeave={() => setIsAboutOpen(false)}
-          >
-            <a href="/about" onClick={(e) => e.preventDefault()}>À propos de nous</a>
-            {isAboutOpen && (
-              <ul className="dropdown-menu">
-                <li><a href="/aboutus">En savoir plus sur les créateurs de CyberPsy</a></li>
-                <li><a href="/jeu">Découvrir notre jeu Android</a></li>
-              </ul>
-            )}
-          </li>
-
-          {/* Menu déroulant "Utilisateur" (affiché si l'utilisateur est connecté) */}
-          {isUserLoggedIn && (
-            <li
-              className="dropdown"
+          {isUserLoggedIn ? (
+            <li className="dropdown"
               onMouseEnter={() => setIsProfilOpen(true)}
-              onMouseLeave={() => setIsProfilOpen(false)}
-            >
+              onMouseLeave={() => setIsProfilOpen(false)}>
               <a href="/" onClick={(e) => e.preventDefault()}>{userName}</a>
               {isProfilOpen && (
                 <ul className="dropdown-menu">
                   <li><a href="/userBoard">Mon tableau de bord</a></li>
-                  <li><a href="/parametreCompte">Paramètre de mon compte</a></li>
+                  <li><a href="/parametreCompte">Paramètres</a></li>
                   <li><a href="/" onClick={handleLogout}>Se déconnecter</a></li>
                 </ul>
               )}
             </li>
-          )}
-
-          {/* Si l'utilisateur n'est pas connecté */}
-          {!isUserLoggedIn && (
+          ) : (
             <div className="nav-right">
               <li><a href="/login">Se connecter</a></li>
               <li><a href="/register" className="btn-open-account">Créer un compte</a></li>
@@ -177,64 +218,38 @@ const Qcm = () => {
           )}
         </ul>
       </nav>
-
-      {/* Contenu principal */}
       <div className="qcm-container">
         {!isSubmitted ? (
           <div className="question-section">
-            <h2 className="question-title">Questionnaire</h2>
-            <p className="question-text">
-              {questions[currentQuestionIndex].question}
-            </p>
-            <ul className="options-list">
-              {questions[currentQuestionIndex].options.map((option, index) => (
-                <li key={index}>
-                  <button
-                    className="option-button"
-                    onClick={() => handleAnswer(option.type)}
-                  >
-                    {option.text}
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <h2 className="question-title">Questionnaire {selectedLevel}</h2>
+            {isLoading ? (
+              <p>Chargement des questions...</p>
+            ) : questions.length > 0 ? (
+              <>
+                <h2 className="question-title">{questions[currentQuestionIndex]?.question}</h2>
+                <ul className="options-list">
+                  {options.map((option, index) => (
+                    <li key={index}>
+                      <button className="option-button" onClick={() => handleAnswer(option)}>
+                        {option}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p>Aucune question disponible pour ce niveau</p>
+            )}
           </div>
         ) : (
           <div className="result-section">
-  <h2>Résultat(s) du questionnaire</h2>
-  <div className="result-bars">
-    {Object.entries(results).map(([type, percentage], index) => (
-      <div key={index} className="result-bar">
-        <span className="type-label">{type}:</span>
-        <div className="progress-bar-container">
-          <div
-            className="progress-bar"
-            style={{
-              width: `${percentage}%`,
-              backgroundColor:
-                percentage > 75
-                  ? "#28a745" // Vert pour les hauts pourcentages
-                  : percentage > 50
-                  ? "#ffc107" // Jaune pour les moyens pourcentages
-                  : "#dc3545", // Rouge pour les bas pourcentages
-            }}
-          ></div>
-        </div>
-        <span className="percentage-label">{percentage}%</span>
-      </div>
-    ))}
-  </div>
-  {/* Ajoutez ce bouton pour réinitialiser */}
-  <button className="restart-button" onClick={handleRestart}>
-    Recommencer le questionnaire
-  </button>
-  <button
-              className="profile-button"
-              onClick={() => navigate("/profil")} // Redirection vers la page profil
-            >
-              En savoir plus sur les profils 
-            </button>
-</div>
+            <h2>Résultats du questionnaire</h2>
+            <h2>Votre score: {score} / {questions.length}</h2>
+            <div className="detailed-results">
+              {displayDetailedResults()}
+            </div>
+            <button className="restart-button" onClick={handleRestart}>Recommencer</button>
+          </div>
         )}
       </div>
     </>
