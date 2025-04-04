@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './AboutUs.css';
 import logo from '../images/logo.png';
-import Avatar1 from '../images/avatar1.png'; 
-import Avatar2 from '../images/avatar2.png'; 
+import Avatar1 from '../images/avatar1.jpg'; 
+import Avatar2 from '../images/avatar2.jpg'; 
 import Avatar3 from '../images/avatar3.png'; 
+import api from '../../axios';// Utilisation d'axios
+
 
 const AboutUs = () => {
     const [isAboutOpen, setIsAboutOpen] = useState(false);
